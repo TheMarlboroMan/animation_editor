@@ -1,0 +1,28 @@
+*caballero caminando
+!1
+500	1
+500	2
+500	3
+500	4
+*caballero daño
+!2
+500	1
+500	2
+*caballero melee
+!3
+500	1
+500	2
+*enemigo caminando
+!4
+500	1
+500	2
+500	3
+500	4
+*enemigo daño
+!5
+500	1
+500	2
+*enemigo melee
+!6
+500	1
+500	2

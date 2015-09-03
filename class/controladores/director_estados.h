@@ -4,7 +4,7 @@
 class Director_estados
 {
 	public:
-	enum class t_estados {INTRO, EJEMPLO};
+	enum class t_estados {animaciones};
 
 	private:
 	t_estados actual;
@@ -13,7 +13,7 @@ class Director_estados
 	public:
 
 	Director_estados()
-		:actual(t_estados::INTRO), deseado(t_estados::INTRO)
+		:actual(t_estados::animaciones), deseado(t_estados::animaciones)
 	{}
 
 	bool es_cambio_estado() const {return actual!=deseado;}

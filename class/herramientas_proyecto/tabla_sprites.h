@@ -49,8 +49,6 @@ struct Frame_sprites
 	Frame_sprites()
 		:x(0), y(0), w(0), h(0), desp_x(0), desp_y(0)
 	{}
-
-
 };
 
 class Tabla_sprites

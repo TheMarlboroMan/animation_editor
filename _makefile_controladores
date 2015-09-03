@@ -12,17 +12,12 @@ $(DIR_CONTROLADORES)director_estados.h \
 $(DIR_CONTROLADORES)director_estados.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)director_estados.cpp -o $(DIR_O)director_estados.o 
 
-$(DIR_O)controlador_intro.o :\
+$(DIR_O)controlador_animaciones.o :\
 $(DIR_O)controlador_base.o \
-$(DIR_CONTROLADORES)controlador_intro.h \
-$(DIR_CONTROLADORES)controlador_intro.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_intro.cpp -o $(DIR_O)controlador_intro.o
+$(DIR_CONTROLADORES)controlador_animaciones.h \
+$(DIR_CONTROLADORES)controlador_animaciones.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_animaciones.cpp -o $(DIR_O)controlador_animaciones.o
 
-$(DIR_O)controlador_ejemplo.o :\
-$(DIR_O)controlador_base.o \
-$(DIR_CONTROLADORES)controlador_ejemplo.h \
-$(DIR_CONTROLADORES)controlador_ejemplo.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_ejemplo.cpp -o $(DIR_O)controlador_ejemplo.o
 
 $(DIR_O)controlador_base.o :\
 $(DIR_O)director_estados.o \

@@ -1,11 +1,11 @@
 DEP_HERRAMIENTAS_PROYECTO=$(DIR_O)tabla_sprites.o \
 $(DIR_O)generador_numeros.o \
+$(DIR_O)tabla_animaciones.o \
 
 DEP_CLASES_APP=
 
 DEP_CONTROLADORES=$(DIR_O)controlador_base.o \
-$(DIR_O)controlador_intro.o \
-$(DIR_O)controlador_ejemplo.o \
+$(DIR_O)controlador_animaciones.o \
 
 DEP_FRAMEWORK_BASE=$(DIR_O)input_base.o \
 $(DIR_O)configuracion_base.o \

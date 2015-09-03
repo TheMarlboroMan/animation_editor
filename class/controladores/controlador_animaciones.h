@@ -1,9 +1,9 @@
-#ifndef CONTROLADOR_INTRO
-#define CONTROLADOR_INTRO
+#ifndef CONTROLADOR_ANIMACIONES
+#define CONTROLADOR_ANIMACIONES
 
 #include "controlador_base.h"
 
-class Controlador_intro:public Controlador_base
+class Controlador_animaciones:public Controlador_base
 {
 	//////////////
 	//Propiedades
@@ -18,8 +18,8 @@ class Controlador_intro:public Controlador_base
 	//Interface pública.
 	public:
 	
-	Controlador_intro(Director_estados &DI, DLibV::Pantalla&);
-	~Controlador_intro();
+	Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&);
+	~Controlador_animaciones();
 
 	virtual void preloop(Input_base& input, float delta);
 	virtual void postloop(Input_base& input, float delta);
