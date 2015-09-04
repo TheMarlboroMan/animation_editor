@@ -14,28 +14,31 @@ struct Linea_animacion
 	public:
 
 					explicit operator bool() const;
-	int 				duracion;
+	float 				duracion;			//Cuánto dura.
+	float				max_duracion;			//Cuál es el último momento de su duración dentro de toda la animación.
 	Frame_sprites 			frame;
 };
 
 class Animacion
 {
-	public:		
+	public:
 					Animacion();
-					explicit operator bool() const;	
+					explicit operator bool() const;
 	const Linea_animacion&		obtener(size_t) const;
+	const Linea_animacion&		obtener_para_tiempo_animacion(float);
 	void				insertar_frame(const Frame_sprites& v, int);
 
+	bool				es_estatica() const {return lineas.size()==1;}
 	size_t				size() const {return lineas.size();}
 	const std::string&		acc_nombre() const {return nombre;}
-	int				acc_duracion_total() const {return duracion_total;}
+	float				acc_duracion_total() const {return duracion_total;}
 	void				mut_nombre(const std::string&v) {nombre=v;}
 
 	private:
 
 	std::string			nombre;
 	std::vector<Linea_animacion>	lineas;
-	int				duracion_total;
+	float				duracion_total;
 
 };
 
@@ -58,6 +61,7 @@ class Tabla_animaciones
 	size_t				obtener_ultimo_indice() const;
 	bool				existe_indice(size_t v) const {return animaciones.count(v);}
 	std::vector<size_t>		obtener_vector_claves() const;
+	const std::map<size_t, Animacion> acc_animaciones() const {return animaciones;}
 
 	private:
 

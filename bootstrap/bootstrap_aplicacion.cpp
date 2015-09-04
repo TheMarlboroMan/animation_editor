@@ -46,7 +46,7 @@ void App::loop_aplicacion(Kernel_app& kernel)
 		Director_estados director_estados;
 
 		//Controladores e interfaces.
-		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla());
+		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones);
 		Interface_controlador * interface_controlador=&controlador_animaciones;
 
 		//Loop principal.

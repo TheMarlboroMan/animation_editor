@@ -1,28 +1,54 @@
-*caballero caminando
+*caballero quieto
 !1
-500	1
-500	2
-500	3
-500	4
+100	1
 *caballero daño
 !2
-500	1
-500	2
-*caballero melee
+100	2
+100	3
+*caballero caminando
 !3
-500	1
-500	2
-*enemigo caminando
+100	4
+100	5
+100	6
+100	7
+*caballero muere
 !4
-500	1
-500	2
-500	3
-500	4
-*enemigo daño
+100	8
+100	9
+100	10
+100	11
+100	12
+*caballero melée
 !5
-500	1
-500	2
-*enemigo melee
+100	13
+100	14
+*caballero guardia
 !6
-500	1
-500	2
+100	15
+*enemigo quieto
+!7
+100	16
+*enemigo daño
+!8
+100	17
+100	18
+*enemigo caminando
+!9
+100	19
+100	20
+100	21
+100	22
+*enemigo muere
+!10
+100	23
+100	24
+100	25
+100	26
+100	27
+*enemigo melée
+!11
+100	28
+100	29
+*enemigo guardia
+!12
+100	30

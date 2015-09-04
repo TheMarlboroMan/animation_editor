@@ -25,8 +25,19 @@ const Linea_animacion& Animacion::obtener(size_t val) const
 
 void Animacion::insertar_frame(const Frame_sprites& v, int d)
 {
-	duracion_total+=d;
-	lineas.push_back(Linea_animacion{d, v});
+	float dur=(float)d / 1000.f;
+	duracion_total+=dur;
+	lineas.push_back(Linea_animacion{dur, duracion_total, v});
+}
+
+const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t)
+{
+	float transformado=fmod(t, duracion_total);
+	for(const Linea_animacion& fr : lineas)
+	{
+		if(transformado <= fr.max_duracion) return fr;
+	}
+	return lineas.at(0);
 }
 
 /////////////////////////////////////

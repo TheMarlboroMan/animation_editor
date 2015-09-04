@@ -2,7 +2,7 @@ DEP_HERRAMIENTAS_PROYECTO=$(DIR_O)tabla_sprites.o \
 $(DIR_O)generador_numeros.o \
 $(DIR_O)tabla_animaciones.o \
 
-DEP_CLASES_APP=
+DEP_CLASES_APP=$(DIR_O)linea_listado.o \
 
 DEP_CONTROLADORES=$(DIR_O)controlador_base.o \
 $(DIR_O)controlador_animaciones.o \

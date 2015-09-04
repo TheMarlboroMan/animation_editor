@@ -34,7 +34,9 @@ I_DERECHA,
 I_ARRIBA,
 I_ABAJO,
 I_CLICK_I,
-I_CLICK_D
+I_CLICK_D,
+I_AV_PAG,
+I_RE_PAG,
 };
 
 	///////////////////

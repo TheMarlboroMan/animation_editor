@@ -77,7 +77,7 @@ void Kernel_app::inicializar()
 {
 	auto& CARG=acc_controlador_argumentos();
 
-	if(CARG.obtener_cantidad()!=4)
+	if(CARG.obtener_cantidad() < 3 || CARG.obtener_cantidad() > 5)
 	{
 		throw Kernel_excepcion("ERROR: ejecutable img=ruta_imagen hoja=ruta_hoja_sprites out=ruta_fichero [res=800x600]"
 "\n"
