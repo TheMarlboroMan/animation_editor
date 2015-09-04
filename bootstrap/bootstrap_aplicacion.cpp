@@ -2,6 +2,7 @@
 #include "bootstrap_aplicacion.h"
 
 #include "../class/controladores/controlador_animaciones.h"
+#include "../class/controladores/controlador_frames.h"
 #include "../class/herramientas_proyecto/tabla_animaciones.h"
 
 using namespace App;
@@ -21,32 +22,14 @@ void App::loop_aplicacion(Kernel_app& kernel)
 		//Igual, pero con el output...
 		Tabla_animaciones tabla_animaciones(tabla_sprites);
 		std::ifstream test_out(ruta_out);
-		if(test_out.is_open()) 
-		{
-			tabla_animaciones.cargar(ruta_out);
-/*
-			const auto& anim=tabla_animaciones.obtener(1);
-			LOG<<anim.acc_nombre()<<", "<<anim.acc_duracion_total()<<std::endl;
-
-			size_t i=0;
-			while(i < 4)
-			{
-				const auto& f=anim.obtener(i);
-				LOG<<"FRAME "<<i<<": "<<f.duracion<<" -> "<<f.frame.x<<" "<<f.frame.y<<std::endl;
-				++i;
-			}
-			std::cout<<tabla_animaciones.obtener_siguiente_indice()<<std::endl;
-*/
-		}
-
-		//TODO: Usar "obtener_vector_claves" para sacar las posibles claves e irlas pintando
-		//de un modo controlado. Dejar un hueco para pintar la animación en si.
+		if(test_out.is_open()) tabla_animaciones.cargar(ruta_out);
 
 		//Declaraciones de herramientas externas.
 		Director_estados director_estados;
 
 		//Controladores e interfaces.
 		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones);
+		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla());
 		Interface_controlador * interface_controlador=&controlador_animaciones;
 
 		//Loop principal.
@@ -57,11 +40,16 @@ void App::loop_aplicacion(Kernel_app& kernel)
 				switch(director_estados.acc_estado_actual())
 				{
 					case Director_estados::t_estados::animaciones: break;
+					case Director_estados::t_estados::frames: break;
 				}
 
 				switch(director_estados.acc_estado_deseado())
 				{
 					case Director_estados::t_estados::animaciones: interface_controlador=&controlador_animaciones; break;
+					case Director_estados::t_estados::frames:
+						//TODO: Alimentar con el frame que queremos usar...
+						interface_controlador=&controlador_frames; 
+					break;
 				}
 
 				director_estados.confirmar_cambio_estado();

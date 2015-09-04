@@ -27,6 +27,7 @@ class Input:public Input_base
 
 	enum inputs{
 I_ESCAPE=0,
+I_ENTER,
 I_ESPACIO,
 I_TAB,
 I_IZQUIERDA,

@@ -11,6 +11,11 @@ $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.h \
 $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.cpp -o $(DIR_O)generador_numeros.o 
 
+$(DIR_O)estructura_paginacion.o :\
+$(DIR_HERRAMIENTAS_PROYECTO)estructura_paginacion.h \
+$(DIR_HERRAMIENTAS_PROYECTO)estructura_paginacion.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)estructura_paginacion.cpp -o $(DIR_O)estructura_paginacion.o 
+
 $(DIR_O)tabla_animaciones.o :\
 $(DIR_O)tabla_sprites.o\
 $(DIR_HERRAMIENTAS_PROYECTO)tabla_animaciones.h \

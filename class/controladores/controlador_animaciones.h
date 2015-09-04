@@ -6,6 +6,7 @@
 #include "controlador_base.h"
 #include "../app/linea_listado.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
+#include "../herramientas_proyecto/estructura_paginacion.h"
 
 class Controlador_animaciones:public Controlador_base
 {
@@ -14,7 +15,6 @@ class Controlador_animaciones:public Controlador_base
 	public:
 	
 							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&);
-							~Controlador_animaciones();
 
 	virtual void 					preloop(Input_base& input, float delta);
 	virtual void 					postloop(Input_base& input, float delta);
@@ -33,17 +33,12 @@ class Controlador_animaciones:public Controlador_base
 	Tabla_animaciones&				tabla_animaciones;
 	std::vector<Linea_listado>			lineas_animaciones;
 
-	size_t						registros_por_pagina;
-	size_t						pagina_actual;
-	size_t						total_paginas;
-	size_t						animacion_actual;
+	Estructura_paginacion				estructura_paginacion;
+
 	float						tiempo;
 
 	void						componer_lista();
 	void						componer_vista_lista();
-	void						calcular_informacion_paginas(int h);
-	void						cambiar_pagina(int);
-	void						cambiar_animacion(int);
 	void						calcular_animacion_actual();
 	void						calcular_posicion_seleccion_animacion_actual();
 
