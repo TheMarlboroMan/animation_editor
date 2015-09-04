@@ -16,12 +16,14 @@ class Estructura_paginacion
 	bool						cambiar_pagina(int);
 	bool						cambiar_item(int);
 
+	void						reiniciar_indice() {indice_actual=0;}
 	size_t						acc_pagina_actual() const {return pagina_actual;}
 	size_t						acc_indice_actual() const {return indice_actual;}
 	size_t						acc_total_paginas() const {return total_paginas;}
 	size_t						acc_registros_por_pagina() const {return registros_por_pagina;}
 
 	void						establecer_altura(size_t);
+	void						establecer_total_paginas(size_t);
 
 	private:
 

@@ -4,23 +4,19 @@
 Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla)
 	:Controlador_base(DI),
 	rep_txt(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), ""),
-	rep_seleccion_animacion_actual(
+	rep_seleccion_actual(
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
 			64, 64, 192),
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
 	tabla_animaciones(tabla),
-	estructura_paginacion(altura_linea, tabla_animaciones.size(), 0),
+	estructura_paginacion(altura_linea, tabla_animaciones.size(), pantalla.acc_h()-y_inicio_lista),
 	tiempo(0.0f)
 {
-	rep_txt.establecer_posicion(16, 16);
+	rep_txt.establecer_posicion(y_inicio_lista, y_inicio_lista);
 	rep_txt.mut_interlineado(4);
-	rep_animacion.establecer_posicion(y_inicio_lista, pantalla.acc_w() / 2);
+	rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista);
 
-	estructura_paginacion.establecer_altura(pantalla.acc_h()-y_inicio_lista);
-
-	componer_lista();
-	componer_vista_lista();
-	calcular_animacion_actual();
+	refrescar();
 }
 
 void Controlador_animaciones::preloop(Input_base& input, float delta)
@@ -49,7 +45,6 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			return;
 		}
 
-		size_t pag=estructura_paginacion.acc_pagina_actual();
 		bool recalcular=false;
 
 		//Control de paginación...
@@ -74,13 +69,13 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 		
 		if(recalcular)
 		{
-			calcular_posicion_seleccion_animacion_actual();
+			calcular_posicion_seleccion_actual();
 			calcular_animacion_actual();
 
-			if(pag != estructura_paginacion.acc_pagina_actual())
-			{
-				componer_vista_lista();
-			}
+//			if(pag != estructura_paginacion.acc_pagina_actual())
+//			{
+			componer_vista_lista();
+//			}
 		}
 	}
 }
@@ -91,20 +86,27 @@ void Controlador_animaciones::dibujar(DLibV::Pantalla& pantalla)
 	if(f)
 	{
 		rep_animacion.establecer_recorte(f.x, f.y, f.w, f.h);
-		rep_animacion.establecer_posicion(y_inicio_lista, pantalla.acc_w() / 2, f.w, f.h);
+		rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista, f.w, f.h);
 	}
 
 	pantalla.limpiar(0, 0, 0, 255);
-	rep_seleccion_animacion_actual.volcar(pantalla);
+	rep_seleccion_actual.volcar(pantalla);
 	rep_txt.volcar(pantalla);
 	rep_animacion.volcar(pantalla);
+}
+
+void Controlador_animaciones::refrescar()
+{
+	componer_lista();
+	componer_vista_lista();
+	calcular_animacion_actual();
 }
 
 void Controlador_animaciones::componer_lista()
 {
 	if(! tabla_animaciones.size()) return;
 	
-	lineas_animaciones.clear();
+	lineas_listado.clear();
 	std::stringstream ss;
 
 	const auto& animaciones=tabla_animaciones.acc_animaciones();
@@ -112,8 +114,8 @@ void Controlador_animaciones::componer_lista()
 	{
 		const auto& an=par.second;
 
-		ss<<par.first<<" : "<<an.acc_nombre()<<" ["<<an.acc_duracion_total()<<"ms]";
-		lineas_animaciones.push_back( Linea_listado(par.first, ss.str() ) );
+		ss<<par.first<<" : "<<an.acc_nombre()<<" ["<<an.size()<<" frames, "<<an.acc_duracion_total()<<"s]";
+		lineas_listado.push_back( Linea_listado(par.first, ss.str() ) );
 		ss.str("");
 	}
 }
@@ -122,11 +124,11 @@ void Controlador_animaciones::componer_vista_lista()
 {
 	size_t reg=estructura_paginacion.acc_registros_por_pagina();
 
-	auto 	ini=std::begin(lineas_animaciones)+(estructura_paginacion.acc_pagina_actual() * reg),
+	auto 	ini=std::begin(lineas_listado)+(estructura_paginacion.acc_pagina_actual() * reg),
 		fin=ini + reg;
 	std::stringstream ss;
 
-	while(ini < std::end(lineas_animaciones) && ini < fin)
+	while(ini < std::end(lineas_listado) && ini < fin)
 	{
 		ss<<ini->acc_texto()<<"\n";
 		++ini;
@@ -135,14 +137,14 @@ void Controlador_animaciones::componer_vista_lista()
 	rep_txt.asignar(ss.str());
 }
 
-void Controlador_animaciones::calcular_posicion_seleccion_animacion_actual()
+void Controlador_animaciones::calcular_posicion_seleccion_actual()
 {
 	size_t indice=estructura_paginacion.acc_indice_actual() % estructura_paginacion.acc_registros_por_pagina();
-	rep_seleccion_animacion_actual.establecer_posicion(y_inicio_lista, y_inicio_lista+(indice * altura_linea));
+	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y_inicio_lista+(indice * altura_linea));
 }
 
 void Controlador_animaciones::calcular_animacion_actual()
 {	
 	if(!tabla_animaciones.size()) return;
-	animacion=tabla_animaciones.obtener(lineas_animaciones[estructura_paginacion.acc_indice_actual()].acc_indice_animacion());
+	animacion=tabla_animaciones.obtener(lineas_listado[estructura_paginacion.acc_indice_actual()].acc_indice());
 }

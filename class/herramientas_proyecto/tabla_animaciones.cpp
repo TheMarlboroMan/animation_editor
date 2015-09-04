@@ -18,7 +18,22 @@ Animacion::operator bool() const
 	return duracion_total || lineas.size(); // && nombre.size();
 }
 
+void Animacion::eliminar_frame(size_t f)
+{
+	auto it=std::begin(lineas)+f;
+	if(it < std::end(lineas))
+	{
+		lineas.erase(it);
+		reajustar_tiempo_frames();
+	}
+}
+
 const Linea_animacion& Animacion::obtener(size_t val) const
+{
+	return lineas.at(val);
+}
+
+Linea_animacion& Animacion::obtener(size_t val)
 {
 	return lineas.at(val);
 }
@@ -27,7 +42,22 @@ void Animacion::insertar_frame(const Frame_sprites& v, int d)
 {
 	float dur=(float)d / 1000.f;
 	duracion_total+=dur;
-	lineas.push_back(Linea_animacion{dur, duracion_total, v});
+	lineas.push_back(Linea_animacion{dur, 0.0f, v});
+}
+
+/**
+* Ajusta el valor "momento_aparición" de cada uno de los frames con respecto
+* al tiempo general de la aplicación.
+*/
+
+void Animacion::reajustar_tiempo_frames()
+{
+	duracion_total=0;
+	for(auto& l: lineas)
+	{
+		duracion_total+=l.duracion;
+		l.momento_aparicion=duracion_total;
+	}
 }
 
 const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t)
@@ -35,9 +65,15 @@ const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t)
 	float transformado=fmod(t, duracion_total);
 	for(const Linea_animacion& fr : lineas)
 	{
-		if(transformado <= fr.max_duracion) return fr;
+		if(transformado <= fr.momento_aparicion) return fr;
 	}
 	return lineas.at(0);
+}
+
+void Animacion::intercambiar_frames(size_t indice_a, size_t indice_b)
+{
+	std::iter_swap(lineas.begin()+indice_a, lineas.begin()+indice_b);
+	reajustar_tiempo_frames();	
 }
 
 /////////////////////////////////////
@@ -83,6 +119,7 @@ void Tabla_animaciones::cargar(const std::string& ruta)
 					case inicio_titulo: 
 						if(animacion) 
 						{
+							animacion.reajustar_tiempo_frames();
 							animaciones[id]=animacion;					
 						}
 						animacion=Animacion(); //Reset animación...

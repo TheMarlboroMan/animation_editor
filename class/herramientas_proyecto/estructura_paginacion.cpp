@@ -1,5 +1,7 @@
 #include "estructura_paginacion.h"
 
+#include <iostream>
+
 /**
 * @param size_t alt : altura de la línea.
 * @param size_t t : total de elementos
@@ -11,12 +13,22 @@ Estructura_paginacion::Estructura_paginacion(size_t alt, size_t t, size_t h)
 	registros_por_pagina(0), pagina_actual(0),
 	total_paginas(0), indice_actual(0)
 {
-
+	//Prevenir una división por 0...
+	if(altura_linea && h)
+	{
+		calcular_informacion_paginas();
+	}
 }
 
 void Estructura_paginacion::establecer_altura(size_t ph)
 {
 	h=ph;
+	calcular_informacion_paginas();
+}
+
+void Estructura_paginacion::establecer_total_paginas(size_t val)
+{
+	total_elementos=val;
 	calcular_informacion_paginas();
 }
 
@@ -47,7 +59,7 @@ bool Estructura_paginacion::cambiar_item(int val)
 {
 	bool resultado=false;
 
-	if(val > 0 && indice_actual + 1 <= total_elementos)
+	if(val > 0 && indice_actual + 1 < total_elementos)
 	{
 		++indice_actual;
 		resultado=true;

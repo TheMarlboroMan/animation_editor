@@ -5,8 +5,11 @@ void Input::configurar()
 	//El input I_ESCAPE es la tecla SDLK_ESCAPE. Simple.
 	mapa_teclado.insert(std::make_pair(I_ESCAPE, SDL_SCANCODE_ESCAPE));
 	mapa_teclado.insert(std::make_pair(I_ESPACIO, SDL_SCANCODE_SPACE));
+	mapa_teclado.insert(std::make_pair(I_BORRAR, SDL_SCANCODE_DELETE));
 	mapa_teclado.insert(std::make_pair(I_TAB, SDL_SCANCODE_TAB));
 	mapa_teclado.insert(std::make_pair(I_ENTER, SDL_SCANCODE_RETURN));
+	mapa_teclado.insert(std::make_pair(I_MENOS, SDL_SCANCODE_KP_MINUS));
+	mapa_teclado.insert(std::make_pair(I_MAS, SDL_SCANCODE_KP_PLUS));
 
 	mapa_teclado.insert(std::make_pair(I_IZQUIERDA, SDL_SCANCODE_LEFT));
 	mapa_teclado.insert(std::make_pair(I_DERECHA, SDL_SCANCODE_RIGHT));

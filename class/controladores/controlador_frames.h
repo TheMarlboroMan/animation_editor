@@ -5,6 +5,8 @@
 
 #include "controlador_base.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
+#include "../herramientas_proyecto/estructura_paginacion.h"
+#include "../app/linea_listado.h"
 
 class Controlador_frames:public Controlador_base
 {
@@ -18,32 +20,29 @@ class Controlador_frames:public Controlador_base
 	virtual void 					postloop(Input_base& input, float delta);
 	virtual void 					loop(Input_base& input, float delta);
 	virtual void 					dibujar(DLibV::Pantalla& pantalla);
+	void						asignar_animacion(Animacion&);
 
 	//////////////
 	//Propiedades
 	private:
 
-//	DLibV::Representacion_texto_auto_estatica 	rep_txt;
-//	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_frame_actual;
-//	DLibV::Representacion_bitmap_estatica 		rep_animacion;
-//	Animacion					animacion;
+	Animacion *					animacion;
 
-//	Tabla_animaciones&				tabla_animaciones;
-//	std::vector<Linea_listado>			lineas_animaciones;
+	DLibV::Representacion_texto_auto_estatica 	rep_txt;
+	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
+	DLibV::Representacion_bitmap_estatica 		rep_animacion;
 
-//	size_t						registros_por_pagina;
-//	size_t						pagina_actual;
-//	size_t						total_paginas;
-//	size_t						animacion_actual;
-//	float						tiempo;
+	std::vector<Linea_listado>			lineas_listado;
+	int						w;
+	float						tiempo_pulsado;
 
-//	void						componer_lista();
-//	void						componer_vista_lista();
-//	void						calcular_informacion_paginas(int h);
-//	void						cambiar_pagina(int);
-//	void						cambiar_animacion(int);
-//	void						calcular_animacion_actual();
-//	void						calcular_posicion_seleccion_animacion_actual();
+	Estructura_paginacion				estructura_paginacion;
+
+	void						componer_lista();
+	void						componer_vista_lista();
+	void						calcular_posicion_seleccion_actual();
+	void						calcular_representacion_frame_actual();
+	void						cambiar_duracion_frame(int, float);
 
 	static const size_t				y_inicio_lista=16;
 	static const size_t				altura_linea=13;

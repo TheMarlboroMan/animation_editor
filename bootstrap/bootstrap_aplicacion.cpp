@@ -45,10 +45,13 @@ void App::loop_aplicacion(Kernel_app& kernel)
 
 				switch(director_estados.acc_estado_deseado())
 				{
-					case Director_estados::t_estados::animaciones: interface_controlador=&controlador_animaciones; break;
+					case Director_estados::t_estados::animaciones: 
+						controlador_animaciones.refrescar();
+						interface_controlador=&controlador_animaciones; 
+					break;
 					case Director_estados::t_estados::frames:
-						//TODO: Alimentar con el frame que queremos usar...
-						interface_controlador=&controlador_frames; 
+						controlador_frames.asignar_animacion(tabla_animaciones.obtener(controlador_animaciones.acc_indice_animacion_actual()));
+						interface_controlador=&controlador_frames;
 					break;
 				}
 
