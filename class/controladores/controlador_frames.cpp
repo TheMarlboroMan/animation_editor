@@ -1,8 +1,8 @@
 #include "controlador_frames.h"
 #include "../app/recursos.h"
 
-Controlador_frames::Controlador_frames(Director_estados &DI, DLibV::Pantalla& pantalla)
-	:Controlador_base(DI), animacion(nullptr),
+Controlador_frames::Controlador_frames(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_sprites& ts)
+	:Controlador_base(DI), animacion(nullptr), tabla_sprites(ts), 
 	rep_txt(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), ""),
 	rep_seleccion_actual(
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
@@ -10,6 +10,7 @@ Controlador_frames::Controlador_frames(Director_estados &DI, DLibV::Pantalla& pa
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
 	w(pantalla.acc_w()),
 	tiempo_pulsado(0.0f),
+	indice_frame_nuevo(1),
 	estructura_paginacion(altura_linea, 0, pantalla.acc_h()-y_inicio_lista)
 {
 	rep_txt.establecer_posicion(y_inicio_lista, y_inicio_lista);
@@ -45,7 +46,6 @@ void Controlador_frames::loop(Input_base& input, float delta)
 		size_t indice_actual=estructura_paginacion.acc_indice_actual();
 		bool recalcular=false;
 
-		//Control de paginación...
 		if(input.es_input_down(Input::I_RE_PAG))
 		{
 			recalcular=estructura_paginacion.cambiar_pagina(-1);
@@ -54,9 +54,7 @@ void Controlador_frames::loop(Input_base& input, float delta)
 		{
 			recalcular=estructura_paginacion.cambiar_pagina(1);
 		}
-
-		//Control de selección...
-		if(input.es_input_down(Input::I_ABAJO))
+		else if(input.es_input_down(Input::I_ABAJO))
 		{
 			recalcular=estructura_paginacion.cambiar_item(1);
 		}
@@ -64,9 +62,7 @@ void Controlador_frames::loop(Input_base& input, float delta)
 		{
 			recalcular=estructura_paginacion.cambiar_item(-1);
 		}
-		
-		//Intercambiar animaciones.
-		if(input.es_input_down(Input::I_TAB) && indice_actual)
+		else if(input.es_input_down(Input::I_TAB) && indice_actual)
 		{
 			animacion->intercambiar_frames(indice_actual, indice_actual-1);
 			recalcular=true;				
@@ -79,15 +75,46 @@ void Controlador_frames::loop(Input_base& input, float delta)
 		}
 		else if(input.es_input_down(Input::I_ENTER))
 		{
-			//TODO: Seleccionar otro frame... ¿Ponemos una ruleta abajo
-			//o cambiamos de controlador o algo?.
-			//TODO: No podemos cambiar de controlador, nos sacaría de este estado.
-			recalcular=true;
+/*
+TODO: Crear clase template listado paginado, con métodos clear, que se pueda recomponer
+and shit. Quizás que contenga información posicional también acerca de la posición
+actual, por ejemplo, de forma que no haya que calcularla fuera.
+Sería algo como
+template<typename T>
+listado_lineal
+{
+	estructura_paginacion;
+	std::vector<Linea_listado<T>>;
+
+	passthroughs estructura_paginacion;
+	passthroughs vector;
+}
+*/
+
+			//TODO: Tener dos clases distintas para animación y 
+			//frames: una editable y otra no editable, para 
+			//importarla a otros proyectos.
+
+			//TODO: Tener un controlador sólo para seleccionar el frame
+			//actual y que sea accesible desde este controller al pulsar
+			//alguna tecla. Pasar el valor del frame actual a este otro
+			//controller al volver.
+
+			auto frame=tabla_sprites.obtener(indice_frame_nuevo);
+			if(frame)
+			{
+				animacion->modificar_frame(indice_actual, frame);
+				recalcular=true;
+			}
 		}
 		else if(input.es_input_down(Input::I_ESPACIO))
 		{	
-			//TODO: Insertar frame.
-			recalcular=true;
+			auto frame=tabla_sprites.obtener(indice_frame_nuevo);
+			if(frame)
+			{
+				animacion->insertar_frame(frame, 100, indice_actual);
+				recalcular=true;
+			}
 		}
 		else if(input.es_input_down(Input::I_MAS) || input.es_input_down(Input::I_MENOS))
 		{
@@ -145,15 +172,15 @@ void Controlador_frames::asignar_animacion(Animacion& anim)
 void Controlador_frames::componer_lista()
 {
 	lineas_listado.clear();
-	const size_t total=animacion->size();	
-	estructura_paginacion.establecer_total_paginas(total);
+	const size_t total=animacion->size();
+	estructura_paginacion.establecer_total_elementos(total);
 	const auto& v=animacion->acc_lineas();
 	std::stringstream ss;
 	int i=0;
 	for(auto& l : v)
 	{
-		ss<<i<<" / "<<total<<" :  ["<<l.duracion<<"s]";
-		lineas_listado.push_back(Linea_listado(i, ss.str() ) );
+		ss<<i<<" / "<<total<<" : ("<<l.frame.x<<", "<<l.frame.y<<") ["<<l.duracion<<"s]";
+		lineas_listado.push_back(Linea_listado<std::string>(i, ss.str() ) );
 		ss.str("");
 		++i;
 	}
@@ -170,7 +197,7 @@ void Controlador_frames::componer_vista_lista()
 
 	while(ini < std::end(lineas_listado) && ini < fin)
 	{
-		ss<<ini->acc_texto()<<"\n";
+		ss<<ini->acc_valor()<<"\n";
 		++ini;
 	}
 

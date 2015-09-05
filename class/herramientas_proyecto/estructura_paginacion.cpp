@@ -26,7 +26,7 @@ void Estructura_paginacion::establecer_altura(size_t ph)
 	calcular_informacion_paginas();
 }
 
-void Estructura_paginacion::establecer_total_paginas(size_t val)
+void Estructura_paginacion::establecer_total_elementos(size_t val)
 {
 	total_elementos=val;
 	calcular_informacion_paginas();

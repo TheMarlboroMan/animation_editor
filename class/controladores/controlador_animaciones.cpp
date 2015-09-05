@@ -115,7 +115,7 @@ void Controlador_animaciones::componer_lista()
 		const auto& an=par.second;
 
 		ss<<par.first<<" : "<<an.acc_nombre()<<" ["<<an.size()<<" frames, "<<an.acc_duracion_total()<<"s]";
-		lineas_listado.push_back( Linea_listado(par.first, ss.str() ) );
+		lineas_listado.push_back( Linea_listado<std::string>(par.first, ss.str() ) );
 		ss.str("");
 	}
 }
@@ -130,7 +130,7 @@ void Controlador_animaciones::componer_vista_lista()
 
 	while(ini < std::end(lineas_listado) && ini < fin)
 	{
-		ss<<ini->acc_texto()<<"\n";
+		ss<<ini->acc_valor()<<"\n";
 		++ini;
 	}
 

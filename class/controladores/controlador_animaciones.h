@@ -34,7 +34,7 @@ class Controlador_animaciones:public Controlador_base
 	Animacion					animacion;
 
 	Tabla_animaciones&				tabla_animaciones;
-	std::vector<Linea_listado>			lineas_listado;
+	std::vector<Linea_listado<std::string>>		lineas_listado;
 
 	Estructura_paginacion				estructura_paginacion;
 

@@ -28,6 +28,11 @@ void Animacion::eliminar_frame(size_t f)
 	}
 }
 
+void Animacion::modificar_frame(size_t pos, const Frame_sprites& v)
+{
+	(std::begin(lineas)+pos)->frame=v;
+}
+
 const Linea_animacion& Animacion::obtener(size_t val) const
 {
 	return lineas.at(val);
@@ -43,6 +48,13 @@ void Animacion::insertar_frame(const Frame_sprites& v, int d)
 	float dur=(float)d / 1000.f;
 	duracion_total+=dur;
 	lineas.push_back(Linea_animacion{dur, 0.0f, v});
+}
+
+void Animacion::insertar_frame(const Frame_sprites& v, int d, size_t pos)
+{
+	float dur=(float)d / 1000.f;
+	duracion_total+=dur;
+	lineas.insert(std::begin(lineas)+pos, Linea_animacion{dur, 0.0f, v});
 }
 
 /**
@@ -218,13 +230,6 @@ size_t Tabla_animaciones::obtener_ultimo_indice() const
 {
 	if(!animaciones.size()) return 0;
 	else return animaciones.rbegin()->first;
-}
-
-std::vector<size_t> Tabla_animaciones::obtener_vector_claves() const
-{
-	std::vector<size_t> res;
-	for(const auto& t : animaciones) res.push_back(t.first);
-	return res;
 }
 
 Animacion& Tabla_animaciones::crear_animacion(const std::string& nombre)

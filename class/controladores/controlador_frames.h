@@ -14,7 +14,7 @@ class Controlador_frames:public Controlador_base
 	//Interface pública.
 	public:
 	
-							Controlador_frames(Director_estados &DI, DLibV::Pantalla&);
+							Controlador_frames(Director_estados &DI, DLibV::Pantalla&, Tabla_sprites&);
 
 	virtual void 					preloop(Input_base& input, float delta);
 	virtual void 					postloop(Input_base& input, float delta);
@@ -27,14 +27,16 @@ class Controlador_frames:public Controlador_base
 	private:
 
 	Animacion *					animacion;
+	Tabla_sprites&					tabla_sprites;
 
 	DLibV::Representacion_texto_auto_estatica 	rep_txt;
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
 	DLibV::Representacion_bitmap_estatica 		rep_animacion;
 
-	std::vector<Linea_listado>			lineas_listado;
+	std::vector<Linea_listado<std::string>>		lineas_listado;
 	int						w;
 	float						tiempo_pulsado;
+	size_t						indice_frame_nuevo;
 
 	Estructura_paginacion				estructura_paginacion;
 
