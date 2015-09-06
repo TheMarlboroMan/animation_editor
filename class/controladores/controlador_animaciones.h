@@ -4,15 +4,20 @@
 #include <sstream>
 
 #include "controlador_base.h"
-#include "../app/linea_listado.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
-#include "../herramientas_proyecto/estructura_paginacion.h"
+#include "../herramientas_proyecto/listado_vertical.h"
 
 class Controlador_animaciones:public Controlador_base
 {
 	///////////////
 	//Interface pública.
 	public:
+
+	struct item_listado
+	{
+		size_t		indice;
+		std::string	texto;
+	};
 	
 							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&);
 
@@ -28,15 +33,14 @@ class Controlador_animaciones:public Controlador_base
 	//Propiedades
 	private:
 
-	DLibV::Representacion_texto_auto_estatica 	rep_txt;
+	DLibV::Pantalla&				pantalla;
+	DLibV::Representacion_agrupada_estatica 	rep_listado;
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
 	DLibV::Representacion_bitmap_estatica 		rep_animacion;
 	Animacion					animacion;
 
 	Tabla_animaciones&				tabla_animaciones;
-	std::vector<Linea_listado<std::string>>		lineas_listado;
-
-	Estructura_paginacion				estructura_paginacion;
+	Listado_vertical<item_listado>			listado;
 
 	float						tiempo;
 

@@ -6,7 +6,7 @@
 #include "controlador_base.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
 #include "../herramientas_proyecto/estructura_paginacion.h"
-#include "../app/linea_listado.h"
+#include "../herramientas_proyecto/linea_listado.h"
 
 class Controlador_frames:public Controlador_base
 {

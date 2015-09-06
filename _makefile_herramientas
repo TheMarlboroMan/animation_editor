@@ -11,6 +11,13 @@ $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.h \
 $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)generador_numeros.cpp -o $(DIR_O)generador_numeros.o 
 
+$(DIR_O)listado_vertical.o :\
+$(DIR_O)estructura_paginacion.o\
+$(DIR_O)linea_listado.o\
+$(DIR_HERRAMIENTAS_PROYECTO)listado_vertical.h \
+$(DIR_HERRAMIENTAS_PROYECTO)listado_vertical.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)listado_vertical.cpp -o $(DIR_O)listado_vertical.o 
+
 $(DIR_O)estructura_paginacion.o :\
 $(DIR_HERRAMIENTAS_PROYECTO)estructura_paginacion.h \
 $(DIR_HERRAMIENTAS_PROYECTO)estructura_paginacion.cpp
@@ -26,3 +33,8 @@ $(DIR_O)tabla_sprites.o :\
 $(DIR_HERRAMIENTAS_PROYECTO)tabla_sprites.h \
 $(DIR_HERRAMIENTAS_PROYECTO)tabla_sprites.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)tabla_sprites.cpp -o $(DIR_O)tabla_sprites.o 
+
+$(DIR_O)linea_listado.o :\
+$(DIR_HERRAMIENTAS_PROYECTO)linea_listado.h \
+$(DIR_HERRAMIENTAS_PROYECTO)linea_listado.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_HERRAMIENTAS_PROYECTO)linea_listado.cpp -o $(DIR_O)linea_listado.o 

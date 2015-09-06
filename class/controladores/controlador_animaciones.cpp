@@ -3,19 +3,17 @@
 
 Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla)
 	:Controlador_base(DI),
-	rep_txt(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), ""),
+	pantalla(pantalla),
 	rep_seleccion_actual(
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
 			64, 64, 192),
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
 	tabla_animaciones(tabla),
-	estructura_paginacion(altura_linea, tabla_animaciones.size(), pantalla.acc_h()-y_inicio_lista),
+	listado(pantalla.acc_h()-y_inicio_lista, altura_linea),
 	tiempo(0.0f)
 {
-	rep_txt.establecer_posicion(y_inicio_lista, y_inicio_lista);
-	rep_txt.mut_interlineado(4);
+	rep_listado.establecer_posicion(y_inicio_lista, y_inicio_lista),
 	rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista);
-
 	refrescar();
 }
 
@@ -50,21 +48,21 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 		//Control de paginación...
 		if(input.es_input_down(Input::I_RE_PAG))
 		{
-			recalcular=estructura_paginacion.cambiar_pagina(-1);
+			recalcular=listado.cambiar_pagina(-1);
 		}
 		else if(input.es_input_down(Input::I_AV_PAG))
 		{
-			recalcular=estructura_paginacion.cambiar_pagina(1);
+			recalcular=listado.cambiar_pagina(1);
 		}
 
 		//Control de selección...
 		if(input.es_input_down(Input::I_ABAJO))
 		{
-			recalcular=estructura_paginacion.cambiar_item(1);
+			recalcular=listado.cambiar_item(1);
 		}
 		else if(input.es_input_down(Input::I_ARRIBA))
 		{
-			recalcular=estructura_paginacion.cambiar_item(-1);
+			recalcular=listado.cambiar_item(-1);
 		}
 		
 		if(recalcular)
@@ -72,7 +70,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			calcular_posicion_seleccion_actual();
 			calcular_animacion_actual();
 
-//			if(pag != estructura_paginacion.acc_pagina_actual())
+//			if(pag != listado.acc_pagina_actual())
 //			{
 			componer_vista_lista();
 //			}
@@ -91,7 +89,7 @@ void Controlador_animaciones::dibujar(DLibV::Pantalla& pantalla)
 
 	pantalla.limpiar(0, 0, 0, 255);
 	rep_seleccion_actual.volcar(pantalla);
-	rep_txt.volcar(pantalla);
+	rep_listado.volcar(pantalla);
 	rep_animacion.volcar(pantalla);
 }
 
@@ -106,45 +104,44 @@ void Controlador_animaciones::componer_lista()
 {
 	if(! tabla_animaciones.size()) return;
 	
-	lineas_listado.clear();
+	listado.clear();
 	std::stringstream ss;
 
 	const auto& animaciones=tabla_animaciones.acc_animaciones();
 	for(const auto& par : animaciones)
 	{
 		const auto& an=par.second;
-
 		ss<<par.first<<" : "<<an.acc_nombre()<<" ["<<an.size()<<" frames, "<<an.acc_duracion_total()<<"s]";
-		lineas_listado.push_back( Linea_listado<std::string>(par.first, ss.str() ) );
+		listado.insertar(item_listado{par.first, ss.str()});
 		ss.str("");
 	}
 }
 
 void Controlador_animaciones::componer_vista_lista()
 {
-	size_t reg=estructura_paginacion.acc_registros_por_pagina();
+	rep_listado.vaciar_grupo();
+	const auto pagina=listado.obtener_pagina();
+	using DLibV::Representacion_texto_auto_estatica=Texto;
 
-	auto 	ini=std::begin(lineas_listado)+(estructura_paginacion.acc_pagina_actual() * reg),
-		fin=ini + reg;
-	std::stringstream ss;
-
-	while(ini < std::end(lineas_listado) && ini < fin)
+	for(const auto& item : pagina)
 	{
-		ss<<ini->acc_valor()<<"\n";
-		++ini;
+		Texto * txt=new Texto(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
+		txt->asignar(item.item.acc_valor());
+		txt->establecer_posicion(y_inicio_lista, item.y);
+		rep_listado.insertar_representacion(txt);
 	}
-
-	rep_txt.asignar(ss.str());
 }
 
 void Controlador_animaciones::calcular_posicion_seleccion_actual()
 {
-	size_t indice=estructura_paginacion.acc_indice_actual() % estructura_paginacion.acc_registros_por_pagina();
-	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y_inicio_lista+(indice * altura_linea));
+	//TODO... Posición...
+//	size_t indice=listado.acc_indice_actual() % listado.acc_registros_por_pagina();
+//	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y_inicio_lista+(indice * altura_linea));
 }
 
 void Controlador_animaciones::calcular_animacion_actual()
-{	
-	if(!tabla_animaciones.size()) return;
-	animacion=tabla_animaciones.obtener(lineas_listado[estructura_paginacion.acc_indice_actual()].acc_indice());
+{
+	//TODO: Operador []... 	
+//	if(!tabla_animaciones.size()) return;
+//	animacion=tabla_animaciones.obtener(lineas_listado[listado.acc_indice_actual()].acc_indice());
 }

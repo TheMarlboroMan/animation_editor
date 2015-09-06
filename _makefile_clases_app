@@ -1,3 +1,4 @@
+
 ################################################################################
 #Definciones
 
@@ -6,7 +7,3 @@ DIR_CLASES_APP=./class/app/
 ################################################################################
 #Clases...
 
-$(DIR_O)linea_listado.o :\
-$(DIR_CLASES_APP)linea_listado.h \
-$(DIR_CLASES_APP)linea_listado.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CLASES_APP)linea_listado.cpp -o $(DIR_O)linea_listado.o 

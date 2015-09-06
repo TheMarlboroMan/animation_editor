@@ -2,7 +2,7 @@
 #include "bootstrap_aplicacion.h"
 
 #include "../class/controladores/controlador_animaciones.h"
-#include "../class/controladores/controlador_frames.h"
+//#include "../class/controladores/controlador_frames.h"
 #include "../class/herramientas_proyecto/tabla_animaciones.h"
 
 using namespace App;
@@ -29,7 +29,7 @@ void App::loop_aplicacion(Kernel_app& kernel)
 
 		//Controladores e interfaces.
 		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones);
-		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla(), tabla_sprites);
+//		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla(), tabla_sprites);
 		Interface_controlador * interface_controlador=&controlador_animaciones;
 
 		//Loop principal.
@@ -50,8 +50,8 @@ void App::loop_aplicacion(Kernel_app& kernel)
 						interface_controlador=&controlador_animaciones; 
 					break;
 					case Director_estados::t_estados::frames:
-						controlador_frames.asignar_animacion(tabla_animaciones.obtener(controlador_animaciones.acc_indice_animacion_actual()));
-						interface_controlador=&controlador_frames;
+//						controlador_frames.asignar_animacion(tabla_animaciones.obtener(controlador_animaciones.acc_indice_animacion_actual()));
+//						interface_controlador=&controlador_frames;
 					break;
 				}
 
