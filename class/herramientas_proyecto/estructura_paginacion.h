@@ -23,7 +23,7 @@ class Estructura_paginacion
 	size_t						acc_registros_por_pagina() const {return registros_por_pagina;}
 
 	void						establecer_total_elementos(size_t);
-	void						estabecer_registros_por_pagina(size_t);
+	void						establecer_registros_por_pagina(size_t);
 
 	private:
 

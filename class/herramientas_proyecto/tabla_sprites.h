@@ -61,6 +61,7 @@ class Tabla_sprites
 
 	//TODO: Dar acceso a mapa, sólo para editor.
 	std::map<unsigned int, Frame_sprites>& acc_sprites() {return mapa;}
+	size_t			size() const {return mapa.size();}
 
 	Tabla_sprites(const std::string&);
 	Tabla_sprites();

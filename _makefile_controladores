@@ -12,17 +12,23 @@ $(DIR_CONTROLADORES)director_estados.h \
 $(DIR_CONTROLADORES)director_estados.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)director_estados.cpp -o $(DIR_O)director_estados.o 
 
+$(DIR_O)controlador_selector.o :\
+$(DIR_O)controlador_base.o \
+$(DIR_CONTROLADORES)controlador_selector.h \
+$(DIR_CONTROLADORES)controlador_selector.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_selector.cpp -o $(DIR_O)controlador_selector.o
+
 $(DIR_O)controlador_animaciones.o :\
 $(DIR_O)controlador_base.o \
 $(DIR_CONTROLADORES)controlador_animaciones.h \
 $(DIR_CONTROLADORES)controlador_animaciones.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_animaciones.cpp -o $(DIR_O)controlador_animaciones.o
 
-#$(DIR_O)controlador_frames.o :\
-#$(DIR_O)controlador_base.o \
-#$(DIR_CONTROLADORES)controlador_frames.h \
-#$(DIR_CONTROLADORES)controlador_frames.cpp
-#	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_frames.cpp -o $(DIR_O)controlador_frames.o
+$(DIR_O)controlador_frames.o :\
+$(DIR_O)controlador_base.o \
+$(DIR_CONTROLADORES)controlador_frames.h \
+$(DIR_CONTROLADORES)controlador_frames.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CONTROLADORES)controlador_frames.cpp -o $(DIR_O)controlador_frames.o
 
 $(DIR_O)controlador_base.o :\
 $(DIR_O)director_estados.o \

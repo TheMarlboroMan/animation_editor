@@ -214,6 +214,7 @@ Animacion Tabla_animaciones::obtener_copia(size_t indice)
 	else return Animacion();
 }
 
+/**
 size_t Tabla_animaciones::obtener_siguiente_indice() const
 {
 	if(!animaciones.size()) return 1;
@@ -231,11 +232,18 @@ size_t Tabla_animaciones::obtener_ultimo_indice() const
 	if(!animaciones.size()) return 0;
 	else return animaciones.rbegin()->first;
 }
+*/
 
 Animacion& Tabla_animaciones::crear_animacion(const std::string& nombre)
 {
+	size_t indice=animaciones.rbegin()->first + 1;
 	Animacion animacion;
 	animacion.mut_nombre(nombre);
-	animaciones[obtener_siguiente_indice()]=animacion;
-	return animaciones.at(obtener_siguiente_indice());
+	animaciones[indice]=animacion;
+	return animaciones.at(indice);
+}
+
+void Tabla_animaciones::eliminar_animacion(size_t i)
+{
+	animaciones.erase(i);
 }

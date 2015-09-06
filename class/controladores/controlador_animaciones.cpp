@@ -4,6 +4,7 @@
 Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla)
 	:Controlador_base(DI),
 	pantalla(pantalla),
+	rep_listado(true),
 	rep_seleccion_actual(
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
 			64, 64, 192),
@@ -37,7 +38,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 	}
 	else
 	{
-		if(input.es_input_down(Input::I_ENTER) && tabla_animaciones.size())
+		if(input.es_input_down(Input::I_ESPACIO) && tabla_animaciones.size())
 		{
 			solicitar_cambio_estado(Director_estados::t_estados::frames);
 			return;
@@ -55,7 +56,6 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			recalcular=listado.cambiar_pagina(1);
 		}
 
-		//Control de selección...
 		if(input.es_input_down(Input::I_ABAJO))
 		{
 			recalcular=listado.cambiar_item(1);
@@ -63,6 +63,23 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 		else if(input.es_input_down(Input::I_ARRIBA))
 		{
 			recalcular=listado.cambiar_item(-1);
+		}
+		else if(input.es_input_down(Input::I_INSERTAR))
+		{
+			//TODO TODO...
+			tabla_animaciones.crear_animacion("Nueva animación");
+			recalcular=true;
+		}
+		else if(input.es_input_down(Input::I_BORRAR))
+		{
+			//TODO TODO...
+			tabla_animaciones.eliminar_animacion(listado.item_actual().indice);
+			recalcular=true;
+		}
+		else if(input.es_input_down(Input::I_TAB)
+		{
+			//TODO TODO...
+			//TODO: Swap...
 		}
 		
 		if(recalcular)
@@ -121,27 +138,25 @@ void Controlador_animaciones::componer_vista_lista()
 {
 	rep_listado.vaciar_grupo();
 	const auto pagina=listado.obtener_pagina();
-	using DLibV::Representacion_texto_auto_estatica=Texto;
+	using Texto=DLibV::Representacion_texto_auto_estatica;
 
-	for(const auto& item : pagina)
+	for(const auto& itemp : pagina)
 	{
 		Texto * txt=new Texto(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
-		txt->asignar(item.item.acc_valor());
-		txt->establecer_posicion(y_inicio_lista, item.y);
+		txt->asignar(itemp.item.texto);
+		txt->establecer_posicion(y_inicio_lista, itemp.y);
 		rep_listado.insertar_representacion(txt);
 	}
 }
 
 void Controlador_animaciones::calcular_posicion_seleccion_actual()
 {
-	//TODO... Posición...
-//	size_t indice=listado.acc_indice_actual() % listado.acc_registros_por_pagina();
-//	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y_inicio_lista+(indice * altura_linea));
+	int y=y_inicio_lista+(listado.linea_actual().y);	
+	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y);
 }
 
 void Controlador_animaciones::calcular_animacion_actual()
 {
-	//TODO: Operador []... 	
-//	if(!tabla_animaciones.size()) return;
-//	animacion=tabla_animaciones.obtener(lineas_listado[listado.acc_indice_actual()].acc_indice());
+	if(!tabla_animaciones.size()) return;
+	animacion=tabla_animaciones.obtener(listado.item_actual().indice);
 }

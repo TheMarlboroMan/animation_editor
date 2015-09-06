@@ -27,7 +27,7 @@ class Controlador_animaciones:public Controlador_base
 	virtual void 					dibujar(DLibV::Pantalla& pantalla);
 
 	void						refrescar();
-	size_t						acc_indice_animacion_actual() const {return lineas_listado[estructura_paginacion.acc_indice_actual()].acc_indice();}
+	size_t						acc_indice_animacion_actual() const {return listado.item_actual().indice;}
 
 	//////////////
 	//Propiedades

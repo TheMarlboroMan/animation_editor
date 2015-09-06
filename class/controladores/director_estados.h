@@ -4,7 +4,7 @@
 class Director_estados
 {
 	public:
-	enum class t_estados {animaciones, frames};
+	enum class t_estados {animaciones, frames, selector};
 
 	private:
 	t_estados actual;

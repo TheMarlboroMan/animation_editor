@@ -67,9 +67,10 @@ class Tabla_animaciones
 	size_t				size() {return animaciones.size();}
 
 	//TODO: Herramientas para el editor...
-	size_t				obtener_siguiente_indice() const;
-	size_t				obtener_primer_indice() const;
-	size_t				obtener_ultimo_indice() const;
+//	size_t				obtener_siguiente_indice() const;
+//	size_t				obtener_primer_indice() const;
+//	size_t				obtener_ultimo_indice() const;
+	void				eliminar_animacion(size_t);
 	bool				existe_indice(size_t v) const {return animaciones.count(v);}
 	Animacion&			crear_animacion(const std::string&);
 	const std::map<size_t, Animacion>& acc_animaciones() const {return animaciones;}

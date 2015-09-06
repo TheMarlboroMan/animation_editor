@@ -5,8 +5,7 @@
 
 #include "controlador_base.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
-#include "../herramientas_proyecto/estructura_paginacion.h"
-#include "../herramientas_proyecto/linea_listado.h"
+#include "../herramientas_proyecto/listado_vertical.h"
 
 class Controlador_frames:public Controlador_base
 {
@@ -21,24 +20,29 @@ class Controlador_frames:public Controlador_base
 	virtual void 					loop(Input_base& input, float delta);
 	virtual void 					dibujar(DLibV::Pantalla& pantalla);
 	void						asignar_animacion(Animacion&);
+	void						asignar_frame(size_t);
 
 	//////////////
 	//Propiedades
 	private:
 
+	struct item_listado
+	{
+		size_t		indice;
+		std::string	texto;
+	};
+
+	DLibV::Pantalla&				pantalla;
 	Animacion *					animacion;
 	Tabla_sprites&					tabla_sprites;
+	Listado_vertical<item_listado>			listado;
 
-	DLibV::Representacion_texto_auto_estatica 	rep_txt;
+	DLibV::Representacion_agrupada_estatica 	rep_listado;
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
 	DLibV::Representacion_bitmap_estatica 		rep_animacion;
 
-	std::vector<Linea_listado<std::string>>		lineas_listado;
-	int						w;
 	float						tiempo_pulsado;
 	size_t						indice_frame_nuevo;
-
-	Estructura_paginacion				estructura_paginacion;
 
 	void						componer_lista();
 	void						componer_vista_lista();
