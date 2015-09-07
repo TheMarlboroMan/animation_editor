@@ -1,7 +1,7 @@
 #include "controlador_animaciones.h"
 #include "../app/recursos.h"
 
-Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla)
+Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla, const std::string nombre_fichero)
 	:Controlador_base(DI),
 	pantalla(pantalla),
 	rep_listado(true),
@@ -9,6 +9,7 @@ Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pa
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
 			64, 64, 192),
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
+	nombre_fichero(nombre_fichero),
 	tabla_animaciones(tabla),
 	listado(pantalla.acc_h()-y_inicio_lista, altura_linea),
 	tiempo(0.0f)
@@ -91,6 +92,11 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			else if(input.es_input_down(Input::I_ENTER) && tabla_animaciones.size())
 			{
 				input.iniciar_input_texto();
+				rep_seleccion_actual.mut_rgb(192, 64, 64);
+			}
+			else if(input.es_input_down(Input::I_GUARDAR) && tabla_animaciones.size())
+			{
+				guardar();
 			}
 		}
 		else
@@ -98,6 +104,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			if(input.es_input_down(Input::I_ENTER))
 			{
 				input.finalizar_input_texto();
+				rep_seleccion_actual.mut_rgb(64, 64, 192);
 			}
 			else if(input.hay_input_texto())
 			{
@@ -191,4 +198,33 @@ void Controlador_animaciones::calcular_animacion_actual()
 {
 	if(!tabla_animaciones.size()) return;
 	animacion=tabla_animaciones.obtener_copia(listado.item_actual().indice);
+}
+
+void Controlador_animaciones::guardar()
+{
+	std::ofstream fichero(nombre_fichero);
+
+	if(!fichero)
+	{
+		LOG<<"ERROR: Imposible guardar en fichero "<<nombre_fichero<<std::endl;
+	}
+	else
+	{
+		const auto& animaciones=tabla_animaciones.acc_animaciones();
+		for(const auto& par: animaciones)
+		{
+			const auto& animacion=par.second;
+			fichero<<"*"<<animacion.acc_nombre()<<"\n"<<
+				"!"<<par.first<<"\n";
+
+			const auto& lineas=animacion.acc_lineas();
+			for(const auto& linea : lineas)
+			{
+				fichero<<(linea.duracion * 1000.0f)<<"\t"<<33<<"\n";
+			}
+		}
+
+		fichero.close();
+		LOG<<"Cambios guardados."<<std::endl;
+	}
 }

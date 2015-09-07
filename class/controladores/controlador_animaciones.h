@@ -2,6 +2,7 @@
 #define CONTROLADOR_ANIMACIONES
 
 #include <sstream>
+#include <fstream>
 
 #include "controlador_base.h"
 #include "../herramientas_proyecto/tabla_animaciones.h"
@@ -19,7 +20,7 @@ class Controlador_animaciones:public Controlador_base
 		std::string	texto;
 	};
 	
-							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&);
+							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&, const std::string nombre_fichero);
 
 	virtual void 					preloop(Input_base& input, float delta);
 	virtual void 					postloop(Input_base& input, float delta);
@@ -38,6 +39,7 @@ class Controlador_animaciones:public Controlador_base
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
 	DLibV::Representacion_bitmap_estatica 		rep_animacion;
 	Animacion					animacion;
+	std::string					nombre_fichero;
 
 	Tabla_animaciones&				tabla_animaciones;
 	Listado_vertical<item_listado>			listado;
@@ -48,6 +50,7 @@ class Controlador_animaciones:public Controlador_base
 	void						componer_vista_lista();
 	void						calcular_animacion_actual();
 	void						calcular_posicion_seleccion_actual();
+	void						guardar();
 
 	static const size_t				y_inicio_lista=16;
 	static const size_t				altura_linea=13;

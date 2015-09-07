@@ -4,8 +4,7 @@
 Controlador_selector::Controlador_selector(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_sprites& ts)
 	:Controlador_base(DI),
 	pantalla(pantalla), tabla_sprites(ts), 
-	//TODO...
-	listado(400, 400, dim_item_lista, dim_item_lista),
+	listado(pantalla.acc_w()-(2*inicio_lista), pantalla.acc_h()-(2*inicio_lista), dim_item_lista, dim_item_lista),
 	rep_listado(true),
 	rep_seleccion_actual(
 			DLibH::Herramientas_SDL::nuevo_sdl_rect(0, 0, dim_item_lista, dim_item_lista),
@@ -80,7 +79,7 @@ void Controlador_selector::loop(Input_base& input, float delta)
 		if(recalcular)
 		{
 			componer_lista();
-			calcular_posicion_seleccion_actual();			
+			calcular_posicion_seleccion_actual();
 			componer_vista_lista();
 		}
 	}

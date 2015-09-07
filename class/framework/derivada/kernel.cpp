@@ -81,7 +81,14 @@ void Kernel_app::inicializar()
 	{
 		throw Kernel_excepcion("ERROR: ejecutable img=ruta_imagen hoja=ruta_hoja_sprites out=ruta_fichero [res=800x600]"
 "\n"
-"\n"
+"\n\tCursores: Moverse por listados."
+"\n\tEspacio: Acceder a animación / seleccionar frame."
+"\n\tEnter: Cambiar nombre animación."
+"\n\tInsert: Insertar animación / frame."
+"\n\tTab: Intercambiar animación / frame con anterior."
+"\n\tDelete: Elimianr animación / frame."
+"\n\tEscape: Volver a animaciones / listado frames / abandonar programa"
+"\n\ts: Guardar (sólo en menú de animaciones)"
 ); 
 	}
 	else

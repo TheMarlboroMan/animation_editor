@@ -29,7 +29,7 @@ void App::loop_aplicacion(Kernel_app& kernel)
 		Director_estados director_estados;
 
 		//Controladores e interfaces.
-		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones);
+		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones, ruta_out);
 		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla(), tabla_sprites);
 		Controlador_selector controlador_selector(director_estados, kernel.acc_pantalla(), tabla_sprites);
 		Interface_controlador * interface_controlador=&controlador_animaciones;
@@ -39,23 +39,29 @@ void App::loop_aplicacion(Kernel_app& kernel)
 		{
 			if(director_estados.es_cambio_estado())
 			{
-				switch(director_estados.acc_estado_actual())
+				auto estado_actual=director_estados.acc_estado_actual();
+				auto estado_deseado=director_estados.acc_estado_deseado();
+
+				switch(estado_actual)
 				{
-					case Director_estados::t_estados::animaciones: break;
+					case Director_estados::t_estados::animaciones: 
 					case Director_estados::t_estados::frames: break;
 					case Director_estados::t_estados::selector: 
-						controlador_frames.asignar_frame(controlador_selector.acc_indice_frame());			
+						controlador_frames.asignar_frame(controlador_selector.acc_indice_frame());
 					break;
 				}
 
-				switch(director_estados.acc_estado_deseado())
+				switch(estado_deseado)
 				{
 					case Director_estados::t_estados::animaciones: 
 						controlador_animaciones.refrescar();
 						interface_controlador=&controlador_animaciones; 
 					break;
 					case Director_estados::t_estados::frames:
-						controlador_frames.asignar_animacion(tabla_animaciones.obtener(controlador_animaciones.acc_indice_animacion_actual()));
+						if(estado_actual==Director_estados::t_estados::animaciones)
+						{
+							controlador_frames.asignar_animacion(tabla_animaciones.obtener(controlador_animaciones.acc_indice_animacion_actual()));			
+						}						
 						interface_controlador=&controlador_frames;
 					break;
 					case Director_estados::t_estados::selector:

@@ -41,7 +41,8 @@ I_CLICK_I,
 I_CLICK_D,
 I_AV_PAG,
 I_RE_PAG,
-I_INSERTAR
+I_INSERTAR,
+I_GUARDAR
 };
 
 	///////////////////

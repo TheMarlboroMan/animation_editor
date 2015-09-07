@@ -237,7 +237,7 @@ Animacion& Tabla_animaciones::crear_animacion(const std::string& nombre)
 	Animacion animacion;
 	animacion.mut_nombre(nombre);
 	//Insertar al menos un frame, para que sea válida.
-	animacion.insertar_frame(tabla_sprites.acc_sprites().begin()->second, 1.0f);
+	animacion.insertar_frame(tabla_sprites.acc_sprites().begin()->second, 100);
 	animaciones[indice]=animacion;
 	return animaciones.at(indice);
 }
