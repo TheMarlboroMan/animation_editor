@@ -60,9 +60,10 @@ class Input_base
 	//Este es el método que tendremos que extender.
 	virtual void configurar()=0;
 
+	virtual void turno(); 
+
 	/* Todas estas vamos a imaginar que son finales, ok?... */
 
-	void turno(); 
 
 	bool es_senal_salida() const;
 	bool es_input_down(unsigned int) const;
@@ -80,8 +81,16 @@ class Input_base
 
 //	const DLibI::Controles_SDL::Posicion_raton& acc_posicion_raton() const {return controles_sdl.acc_raton().posicion;}
 	Posicion_raton acc_posicion_raton() const {return controles_sdl.obtener_posicion_raton();}
+	bool es_movimiento_raton() const {return controles_sdl.es_movimiento_raton();}
 
 	DLibI::Controles_SDL& acc_controles_sdl() {return controles_sdl;}
+
+	void iniciar_input_texto() {controles_sdl.iniciar_input_texto();}
+	void finalizar_input_texto() {controles_sdl.finalizar_input_texto();}
+	void vaciar_input_texto() {controles_sdl.vaciar_input_texto();}
+	const std::string acc_input_texto() const {return controles_sdl.acc_input_texto();}
+	bool es_input_texto_activo() const {return controles_sdl.es_input_texto_activo();}
+	bool hay_input_texto() const {return controles_sdl.recibe_eventos_texto();}
 
 	Input_base() {}
 };

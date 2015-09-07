@@ -40,9 +40,19 @@ class Listado_vertical
 		return lineas[estructura_paginacion.acc_indice_actual()];
 	}
 
+	const T&			item(size_t i) const 
+	{
+		return lineas[i];
+	}
+
 	const Item			linea_actual() const 
 	{
 		return Item{(int)altura_linea * (int)estructura_paginacion.acc_indice_actual(),  item_actual()};
+	}
+
+	const Item			linea(size_t i) const 
+	{
+		return Item{(int)altura_linea * (int)i,  item(i)};
 	}
 
 	void 					insertar(const T& v)

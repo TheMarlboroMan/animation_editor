@@ -2,6 +2,7 @@
 #define CONTROLADOR_SELECTOR
 
 #include <sstream>
+#include <algorithm>
 
 #include "controlador_base.h"
 #include "../herramientas_proyecto/tabla_sprites.h"

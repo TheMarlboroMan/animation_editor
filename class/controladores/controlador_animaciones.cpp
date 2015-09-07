@@ -38,48 +38,73 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 	}
 	else
 	{
-		if(input.es_input_down(Input::I_ESPACIO) && tabla_animaciones.size())
-		{
-			solicitar_cambio_estado(Director_estados::t_estados::frames);
-			return;
-		}
-
 		bool recalcular=false;
 
-		//Control de paginación...
-		if(input.es_input_down(Input::I_RE_PAG))
+		if(!input.es_input_texto_activo())
 		{
-			recalcular=listado.cambiar_pagina(-1);
+			if(input.es_input_down(Input::I_ESPACIO) && tabla_animaciones.size())
+			{
+				solicitar_cambio_estado(Director_estados::t_estados::frames);
+				return;
+			}
+			else if(input.es_input_down(Input::I_RE_PAG))
+			{
+				recalcular=listado.cambiar_pagina(-1);
+			}
+			else if(input.es_input_down(Input::I_AV_PAG))
+			{
+				recalcular=listado.cambiar_pagina(1);
+			}
+			if(input.es_input_down(Input::I_ABAJO))
+			{
+				recalcular=listado.cambiar_item(1);
+			}
+			else if(input.es_input_down(Input::I_ARRIBA))
+			{
+				recalcular=listado.cambiar_item(-1);
+			}
+			else if(input.es_input_down(Input::I_INSERTAR))
+			{
+				tabla_animaciones.crear_animacion("Nueva animación");
+				componer_lista();
+				recalcular=true;
+				//TODO: Establecer el índice a la nueva?.
+			}
+			else if(input.es_input_down(Input::I_BORRAR))
+			{
+				tabla_animaciones.eliminar_animacion(listado.item_actual().indice);
+				componer_lista();
+				recalcular=true;
+				//TODO: Ojo, al borrar el último deberíamos cambiar un item para atrás.
+			}
+			else if(input.es_input_down(Input::I_TAB))
+			{
+				if(tabla_animaciones.size() > 1 && listado.acc_indice_actual() > 0)
+				{
+					size_t indice_actual=listado.item_actual().indice;
+					size_t anterior=listado.item(listado.acc_indice_actual()-1).indice;
+					tabla_animaciones.intercambiar_animaciones(indice_actual, anterior);
+					componer_lista();
+					recalcular=true;
+				}
+			}
+			else if(input.es_input_down(Input::I_ENTER) && tabla_animaciones.size())
+			{
+				input.iniciar_input_texto();
+			}
 		}
-		else if(input.es_input_down(Input::I_AV_PAG))
+		else
 		{
-			recalcular=listado.cambiar_pagina(1);
-		}
-
-		if(input.es_input_down(Input::I_ABAJO))
-		{
-			recalcular=listado.cambiar_item(1);
-		}
-		else if(input.es_input_down(Input::I_ARRIBA))
-		{
-			recalcular=listado.cambiar_item(-1);
-		}
-		else if(input.es_input_down(Input::I_INSERTAR))
-		{
-			//TODO TODO...
-			tabla_animaciones.crear_animacion("Nueva animación");
-			recalcular=true;
-		}
-		else if(input.es_input_down(Input::I_BORRAR))
-		{
-			//TODO TODO...
-			tabla_animaciones.eliminar_animacion(listado.item_actual().indice);
-			recalcular=true;
-		}
-		else if(input.es_input_down(Input::I_TAB)
-		{
-			//TODO TODO...
-			//TODO: Swap...
+			if(input.es_input_down(Input::I_ENTER))
+			{
+				input.finalizar_input_texto();
+			}
+			else if(input.hay_input_texto())
+			{
+				tabla_animaciones.obtener(listado.item_actual().indice).mut_nombre(input.acc_input_texto());
+				componer_lista();
+				recalcular=true;
+			}
 		}
 		
 		if(recalcular)
@@ -97,12 +122,19 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 
 void Controlador_animaciones::dibujar(DLibV::Pantalla& pantalla)
 {
-	auto f=animacion.obtener_para_tiempo_animacion(tiempo).frame;
+	auto f=animacion.copia_para_tiempo_animacion(tiempo).frame;
 	if(f)
 	{
 		rep_animacion.establecer_recorte(f.x, f.y, f.w, f.h);
 		rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista, f.w, f.h);
 	}
+	else
+	{
+		rep_animacion.establecer_recorte(0, 0, 0, 0);
+		rep_animacion.establecer_posicion(0, 0, 0, 0);
+	}
+
+
 
 	pantalla.limpiar(0, 0, 0, 255);
 	rep_seleccion_actual.volcar(pantalla);
@@ -158,5 +190,5 @@ void Controlador_animaciones::calcular_posicion_seleccion_actual()
 void Controlador_animaciones::calcular_animacion_actual()
 {
 	if(!tabla_animaciones.size()) return;
-	animacion=tabla_animaciones.obtener(listado.item_actual().indice);
+	animacion=tabla_animaciones.obtener_copia(listado.item_actual().indice);
 }

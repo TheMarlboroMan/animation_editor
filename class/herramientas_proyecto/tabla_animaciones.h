@@ -28,6 +28,7 @@ class Animacion
 	const Linea_animacion&		obtener(size_t) const;
 	Linea_animacion&		obtener(size_t);
 	const Linea_animacion&		obtener_para_tiempo_animacion(float);
+	Linea_animacion			copia_para_tiempo_animacion(float);
 
 	//TODO: Herramientas para edición...
 	void				intercambiar_frames(size_t, size_t);
@@ -74,6 +75,7 @@ class Tabla_animaciones
 	bool				existe_indice(size_t v) const {return animaciones.count(v);}
 	Animacion&			crear_animacion(const std::string&);
 	const std::map<size_t, Animacion>& acc_animaciones() const {return animaciones;}
+	void				intercambiar_animaciones(size_t, size_t);
 
 	const Tabla_sprites&		acc_tabla_sprites() const {return tabla_sprites;}
 
@@ -83,7 +85,7 @@ class Tabla_animaciones
 	size_t				interpretar_como_cabecera(const std::string&);
 	void				interpretar_como_linea(const std::string&, Animacion&);
 
-	const Tabla_sprites&		tabla_sprites;	
+	const Tabla_sprites&		tabla_sprites;
 	std::map<size_t, Animacion>	animaciones;
 };
 

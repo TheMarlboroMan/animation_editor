@@ -113,8 +113,10 @@ void Controlador_selector::componer_vista_lista()
 	for(const auto& itemp : pagina)
 	{
 		const auto& frame=itemp.item.frame;
-		int wr=std::max(wl, frame.w);
-		int hr=std::max(hl, frame.h);
+//		int wr=std::max(wl, frame.w);
+//		int hr=std::max(hl, frame.h);
+		int wr=wl > frame.w ? wl : frame.w;
+		int hr=hl > frame.h ? hl : frame.h;
 		BMP * bmp=new BMP(DLibV::Gestor_texturas::obtener(10));
 		bmp->establecer_recorte(frame.x, frame.y, frame.w, frame.h);
 		bmp->establecer_posicion(itemp.x, itemp.y, wr, hr);

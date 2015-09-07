@@ -82,6 +82,23 @@ const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t)
 	return lineas.at(0);
 }
 
+Linea_animacion Animacion::copia_para_tiempo_animacion(float t)
+{
+	if(!lineas.size())
+	{
+		return Linea_animacion();
+	}
+	else
+	{
+		float transformado=fmod(t, duracion_total);
+		for(const Linea_animacion& fr : lineas)
+		{
+			if(transformado <= fr.momento_aparicion) return fr;
+		}
+		return lineas.at(0);
+	}
+}
+
 void Animacion::intercambiar_frames(size_t indice_a, size_t indice_b)
 {
 	std::iter_swap(lineas.begin()+indice_a, lineas.begin()+indice_b);
@@ -214,31 +231,13 @@ Animacion Tabla_animaciones::obtener_copia(size_t indice)
 	else return Animacion();
 }
 
-/**
-size_t Tabla_animaciones::obtener_siguiente_indice() const
-{
-	if(!animaciones.size()) return 1;
-	else return animaciones.rbegin()->first + 1;
-}
-
-size_t Tabla_animaciones::obtener_primer_indice() const
-{
-	if(!animaciones.size()) return 0;
-	else return animaciones.begin()->first;
-}
-
-size_t Tabla_animaciones::obtener_ultimo_indice() const
-{
-	if(!animaciones.size()) return 0;
-	else return animaciones.rbegin()->first;
-}
-*/
-
 Animacion& Tabla_animaciones::crear_animacion(const std::string& nombre)
 {
-	size_t indice=animaciones.rbegin()->first + 1;
+	size_t indice=animaciones.size() ? animaciones.rbegin()->first + 1 : 1;
 	Animacion animacion;
 	animacion.mut_nombre(nombre);
+	//Insertar al menos un frame, para que sea válida.
+	animacion.insertar_frame(tabla_sprites.acc_sprites().begin()->second, 1.0f);
 	animaciones[indice]=animacion;
 	return animaciones.at(indice);
 }
@@ -246,4 +245,9 @@ Animacion& Tabla_animaciones::crear_animacion(const std::string& nombre)
 void Tabla_animaciones::eliminar_animacion(size_t i)
 {
 	animaciones.erase(i);
+}
+
+void Tabla_animaciones::intercambiar_animaciones(size_t indice_a, size_t indice_b)
+{
+	std::swap(animaciones[indice_a], animaciones[indice_b]);
 }
