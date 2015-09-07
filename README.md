@@ -1,2 +1,6 @@
 # editor_animaciones
-Herramienta para generar animaciones a partir del resultado de "tile_editor"
+##v.0.1
+
+This tool generates animation markup files from the output of "editor_sprites".
+
+There are many bugs lying around, but the tool is as functional as I need it to be.
