@@ -44,6 +44,12 @@ struct Frame_sprites
 	unsigned int w, h;
 	int desp_x, desp_y;
 
+	//TODO: Sólo versión editor!!!.
+	bool operator==(const Frame_sprites& o) const
+	{
+		return o.x==x && o.y==y && o.w==w && o.h==h && o.desp_x==desp_x && o.desp_y==desp_y;
+	}
+
 	explicit operator bool() const {return x || y || w || h || desp_x || desp_y;}
 
 	Frame_sprites()
@@ -59,17 +65,18 @@ class Tabla_sprites
 
 	public:
 
-	//TODO: Dar acceso a mapa, sólo para editor.
-	const std::map<unsigned int, Frame_sprites>& acc_sprites() const {return mapa;}
+	//TODO: Todos estos son sólo para el editor.
+	const std::map<size_t, Frame_sprites>& acc_sprites() const {return mapa;}
 	size_t			size() const {return mapa.size();}
+	size_t			find(const Frame_sprites&f) const;
 
 	Tabla_sprites(const std::string&);
 	Tabla_sprites();
 
 	void cargar(const std::string&);
 	
-	const Frame_sprites& obtener(unsigned int) const;
-	Frame_sprites obtener(unsigned int);
+	const Frame_sprites& obtener(size_t) const;
+	Frame_sprites obtener(size_t);
 };
 
 #endif

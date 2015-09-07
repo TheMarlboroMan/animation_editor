@@ -10,12 +10,12 @@ Tabla_sprites::Tabla_sprites()
 
 }
 
-const Frame_sprites& Tabla_sprites::obtener(unsigned int indice) const
+const Frame_sprites& Tabla_sprites::obtener(size_t indice) const
 {
 	return mapa.at(indice);
 }
 
-Frame_sprites Tabla_sprites::obtener(unsigned int indice)
+Frame_sprites Tabla_sprites::obtener(size_t indice)
 {
 	if(mapa.count(indice)) return mapa[indice];
 	else return Frame_sprites();
@@ -43,7 +43,7 @@ void Tabla_sprites::cargar(const std::string& ruta)
 			if(valores.size()==7)
 			{
 				Frame_sprites f;
-				unsigned int indice=std::atoi(valores[0].c_str());
+				size_t indice=std::atoi(valores[0].c_str());
 				f.x=std::atoi(valores[1].c_str());
 				f.y=std::atoi(valores[2].c_str());
 				f.w=std::atoi(valores[3].c_str());
@@ -60,3 +60,12 @@ void Tabla_sprites::cargar(const std::string& ruta)
 	}
 }
 
+
+size_t Tabla_sprites::find(const Frame_sprites& f) const
+{
+	for(const auto &par : mapa)
+	{
+		if(par.second==f) return par.first;	//Ojo con esto... Puede encontrar un frame "equivalente" con los mismos valores pero otro "indice".
+	}
+	throw std::runtime_error("Error al localizar frame");
+}

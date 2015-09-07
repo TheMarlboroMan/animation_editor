@@ -76,7 +76,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 				tabla_animaciones.eliminar_animacion(listado.item_actual().indice);
 				componer_lista();
 				recalcular=true;
-				//TODO: Ojo, al borrar el último deberíamos cambiar un item para atrás.
+				listado.cambiar_item(-1); //Atrasar uno, al fin y al cabo hemos borrado otro.
 			}
 			else if(input.es_input_down(Input::I_TAB))
 			{
@@ -104,6 +104,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			if(input.es_input_down(Input::I_ENTER))
 			{
 				input.finalizar_input_texto();
+				input.vaciar_input_texto();
 				rep_seleccion_actual.mut_rgb(64, 64, 192);
 			}
 			else if(input.hay_input_texto())
@@ -119,10 +120,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			calcular_posicion_seleccion_actual();
 			calcular_animacion_actual();
 
-//			if(pag != listado.acc_pagina_actual())
-//			{
 			componer_vista_lista();
-//			}
 		}
 	}
 }
@@ -140,8 +138,6 @@ void Controlador_animaciones::dibujar(DLibV::Pantalla& pantalla)
 		rep_animacion.establecer_recorte(0, 0, 0, 0);
 		rep_animacion.establecer_posicion(0, 0, 0, 0);
 	}
-
-
 
 	pantalla.limpiar(0, 0, 0, 255);
 	rep_seleccion_actual.volcar(pantalla);
@@ -219,9 +215,7 @@ void Controlador_animaciones::guardar()
 
 			const auto& lineas=animacion.acc_lineas();
 			for(const auto& linea : lineas)
-			{
-				fichero<<(linea.duracion * 1000.0f)<<"\t"<<33<<"\n";
-			}
+				fichero<<(linea.duracion * 1000.0f)<<"\t"<<tabla_animaciones.acc_tabla_sprites().find(linea.frame)<<"\n";
 		}
 
 		fichero.close();

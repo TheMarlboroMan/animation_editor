@@ -48,6 +48,7 @@ void Animacion::insertar_frame(const Frame_sprites& v, int d)
 	float dur=(float)d / 1000.f;
 	duracion_total+=dur;
 	lineas.push_back(Linea_animacion{dur, 0.0f, v});
+	reajustar_tiempo_frames();
 }
 
 void Animacion::insertar_frame(const Frame_sprites& v, int d, size_t pos)
@@ -55,6 +56,7 @@ void Animacion::insertar_frame(const Frame_sprites& v, int d, size_t pos)
 	float dur=(float)d / 1000.f;
 	duracion_total+=dur;
 	lineas.insert(std::begin(lineas)+pos, Linea_animacion{dur, 0.0f, v});
+	reajustar_tiempo_frames();
 }
 
 /**
@@ -135,22 +137,29 @@ void Tabla_animaciones::cargar(const std::string& ruta)
 		size_t id=0;
 		Animacion animacion;
 
+		auto insertar_anim=[this](Animacion animacion, size_t id)
+		{
+			animacion.reajustar_tiempo_frames();
+			animaciones[id]=animacion;					
+		};
+
 		try
 		{
 			while(true)
 			{
 				linea=L.leer_linea();
-				if(!L) break;
+				if(!L) 
+				{	
+					//Insertar la última animación...
+					if(animacion) insertar_anim(animacion, id);
+					break;
+				}
 
 				const char inicio=linea[0];
 				switch(inicio)
 				{
 					case inicio_titulo: 
-						if(animacion) 
-						{
-							animacion.reajustar_tiempo_frames();
-							animaciones[id]=animacion;					
-						}
+						if(animacion) insertar_anim(animacion, id);
 						animacion=Animacion(); //Reset animación...
 						interpretar_como_titulo(linea.substr(1), animacion); 
 					break;
@@ -165,12 +174,12 @@ void Tabla_animaciones::cargar(const std::string& ruta)
 		}
 		catch(std::runtime_error& e)
 		{
-			LOG<<e.what()<<"Línea "<<L.obtener_numero_linea()<<" ["<<linea<<"]. Cancelando."<<std::endl;
+			LOG<<e.what()<<" : Línea "<<L.obtener_numero_linea()<<" ["<<linea<<"]. Cancelando."<<std::endl;
 			throw e;
 		}
 		catch(std::out_of_range& e)
 		{
-			LOG<<e.what()<<"Línea "<<L.obtener_numero_linea()<<" ["<<linea<<"]. Cancelando."<<std::endl;
+			LOG<<e.what()<<" : Línea "<<L.obtener_numero_linea()<<" ["<<linea<<"]. Cancelando."<<std::endl;
 			throw e;
 		}
 	}
@@ -206,8 +215,16 @@ void Tabla_animaciones::interpretar_como_linea(const std::string& linea, Animaci
 		int duracion=std::atoi(valores[0].c_str());
 		int indice_frame=std::atoi(valores[1].c_str());
 
-		const auto& frame=tabla_sprites.obtener(indice_frame);
-		animacion.insertar_frame(frame, duracion);
+		try
+		{
+			const auto& frame=tabla_sprites.obtener(indice_frame);
+			animacion.insertar_frame(frame, duracion);
+		}
+		catch(std::out_of_range& e)
+		{
+			LOG<<e.what()<<" : no se localiza el indice frame "<<indice_frame<<" para interpretar como línea"<<std::endl;
+			throw e;
+		}
 	}
 	else
 	{
