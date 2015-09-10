@@ -30,6 +30,7 @@ void Tabla_sprites::cargar(const std::string& ruta)
 	if(!L)	
 	{
 		LOG<<"ERROR: Para Tabla_sprites no se ha podido abrir el archivo "<<ruta<<std::endl;
+		throw std::runtime_error("No se puede localizar archivo de frames");
 	}
 	else
 	{
@@ -56,7 +57,8 @@ void Tabla_sprites::cargar(const std::string& ruta)
 			}
 			else
 			{
-				LOG<<"ERROR: En tabla sprites, la línea "<<L.obtener_numero_linea()<<" no está bien formada. Ignorando"<<std::endl;
+				LOG<<"ERROR: En tabla sprites, la línea "<<L.obtener_numero_linea()<<" no está bien formada."<<std::endl;
+				throw std::runtime_error("Linea de frame mal formada");
 			}
 		}
 	}

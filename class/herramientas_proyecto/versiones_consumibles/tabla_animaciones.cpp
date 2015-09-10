@@ -57,6 +57,7 @@ void Tabla_animaciones::cargar(const std::string& ruta)
 	if(!L)	
 	{
 		LOG<<"ERROR: Para Tabla_animaciones no se ha podido abrir el archivo "<<ruta<<std::endl;
+		throw std::runtime_error("Imposible localizar archivo de animación.");
 	}
 	else
 	{
