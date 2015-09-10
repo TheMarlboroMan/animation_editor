@@ -32,7 +32,7 @@ class Animacion
 					explicit operator bool() const {return duracion_total || lineas.size();}
 	const Linea_animacion&		obtener(size_t v) const {return lineas.at(v);}
 	Linea_animacion&		obtener(size_t v) const {return lineas.at(v);}
-	const Linea_animacion&		obtener_para_tiempo_animacion(float);
+	const Linea_animacion		obtener_para_tiempo_animacion(float);
 	size_t				size() const {return lineas.size();}
 	const std::string&		acc_nombre() const {return nombre;}
 	float				acc_duracion_total() const {return duracion_total;}
@@ -55,8 +55,8 @@ class Tabla_animaciones
 					Tabla_animaciones(const Tabla_sprites&);
 					Tabla_animaciones(const Tabla_sprites&, const std::string&);
 	void 				cargar(const std::string&);
-	const Animacion& 		obtener(size_t) const {return animaciones.at(indice);}
-	Animacion& 			obtener(size_t) {return animaciones[indice];}
+	const Animacion& 		obtener(size_t v) const {return animaciones.at(v);}
+	Animacion			obtener(size_t v) {return animaciones[v];}
 	size_t				size() {return animaciones.size();}
 	const Tabla_sprites&		acc_tabla_sprites() const {return tabla_sprites;}
 

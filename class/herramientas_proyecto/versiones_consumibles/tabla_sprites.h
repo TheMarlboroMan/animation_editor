@@ -31,9 +31,14 @@ recurso que se va a usar. Se pueden tener, por ejemplo, dos recursos que
 comparten la misma hoja de sprites aunque representan cosas distintas.
 */
 
+
+#include <fstream>
+#include <map>
+#include <vector>
+
+#include <herramientas/herramientas/herramientas.h>
 #include <herramientas/lector_txt/lector_txt.h>
 #include <herramientas/log_base/log_base.h>
-#include <fstream>
 
 extern DLibH::Log_base LOG;
 
