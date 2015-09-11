@@ -59,10 +59,6 @@ struct Frame_sprites
 
 class Tabla_sprites
 {
-	private:
-
-	std::map<unsigned int, Frame_sprites> mapa;
-
 	public:
 
 	//TODO: Todos estos son sólo para el editor.
@@ -77,6 +73,11 @@ class Tabla_sprites
 	
 	const Frame_sprites& obtener(size_t) const;
 	Frame_sprites obtener(size_t);
+
+	private:
+
+	std::map<size_t, Frame_sprites> mapa;
+
 };
 
 #endif
