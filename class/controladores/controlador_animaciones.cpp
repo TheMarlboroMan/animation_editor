@@ -15,6 +15,7 @@ Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pa
 	tiempo(0.0f)
 {
 	rep_listado.establecer_posicion(y_inicio_lista, y_inicio_lista),
+	rep_listado.establecer_modo_blend(DLibV::Representacion::BLEND_ALPHA);
 	rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista);
 	refrescar();
 }

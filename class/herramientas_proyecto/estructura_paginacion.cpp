@@ -38,16 +38,32 @@ void Estructura_paginacion::calcular_informacion_paginas()
 
 bool Estructura_paginacion::cambiar_pagina(int val, bool forzar)
 {
-	if(val > 0 && pagina_actual + 1 <= total_paginas)
+	if(val > 0)
 	{
-		++pagina_actual;
-		if(forzar) indice_actual+=registros_por_pagina;
+		if(pagina_actual < total_paginas)
+		{
+			++pagina_actual;
+			if(forzar) indice_actual+=registros_por_pagina;
+		}
+		else if(pagina_actual == total_paginas)
+		{
+			indice_actual=total_elementos-1;
+		}
+
 		return true;
 	}
-	else if(val < 0 && pagina_actual > 0)
+	else if(val < 0)
 	{
-		--pagina_actual;
-		if(forzar) indice_actual-=registros_por_pagina;
+		if(pagina_actual > 0) 
+		{
+			--pagina_actual;
+			if(forzar) indice_actual-=registros_por_pagina;
+		}
+		else
+		{
+			indice_actual=0;
+		}
+
 		return true;
 	}
 	else return false;
