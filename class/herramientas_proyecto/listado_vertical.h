@@ -47,7 +47,7 @@ class Listado_vertical
 
 	const Item			linea_actual() const 
 	{
-		return Item{(int)altura_linea * (int)estructura_paginacion.acc_indice_actual(),  item_actual()};
+		return Item{ (int)altura_linea * ( (int)estructura_paginacion.acc_indice_actual() % (int)estructura_paginacion.acc_registros_por_pagina()),  item_actual()};
 	}
 
 	const Item			linea(size_t i) const 

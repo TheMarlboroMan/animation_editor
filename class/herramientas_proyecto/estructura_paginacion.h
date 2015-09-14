@@ -12,7 +12,7 @@ class Estructura_paginacion
 {
 	public:
 							Estructura_paginacion(size_t rpp=0, size_t tot=0);
-	bool						cambiar_pagina(int);
+	bool						cambiar_pagina(int, bool=true);
 	bool						cambiar_item(int);
 
 	void						reiniciar_indice() {indice_actual=0;}

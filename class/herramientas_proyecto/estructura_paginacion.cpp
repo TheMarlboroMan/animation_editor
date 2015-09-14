@@ -36,18 +36,18 @@ void Estructura_paginacion::calcular_informacion_paginas()
 	total_paginas=ceil(total_elementos / registros_por_pagina);
 }
 
-bool Estructura_paginacion::cambiar_pagina(int val)
+bool Estructura_paginacion::cambiar_pagina(int val, bool forzar)
 {
 	if(val > 0 && pagina_actual + 1 <= total_paginas)
 	{
 		++pagina_actual;
-		indice_actual+=registros_por_pagina;
+		if(forzar) indice_actual+=registros_por_pagina;
 		return true;
 	}
 	else if(val < 0 && pagina_actual > 0)
 	{
 		--pagina_actual;
-		indice_actual-=registros_por_pagina;
+		if(forzar) indice_actual-=registros_por_pagina;
 		return true;
 	}
 	else return false;
@@ -70,11 +70,22 @@ bool Estructura_paginacion::cambiar_item(int val)
 	
 	if(resultado)
 	{
-		//Detectar si vamos a cambiar de página.
-		size_t indice=indice_actual % (registros_por_pagina+1);
-		if(indice==registros_por_pagina)
+		//Detectar si vamos a cambiar de página... Se hace en dos direcciones...
+		size_t indice=indice_actual % (registros_por_pagina);
+		if(val > 0)
 		{
-			cambiar_pagina(val);
+			if(!indice)
+			{
+				cambiar_pagina(val, false);
+			}
+		}
+		else if(val < 0)
+		{
+			if(indice==registros_por_pagina - 1)
+			{
+				cambiar_pagina(val, false);
+			}
+	
 		}
 	}
 

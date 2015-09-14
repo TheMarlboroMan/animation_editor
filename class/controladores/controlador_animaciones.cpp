@@ -117,10 +117,9 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 		
 		if(recalcular)
 		{
-			calcular_posicion_seleccion_actual();
 			calcular_animacion_actual();
-
 			componer_vista_lista();
+			calcular_posicion_seleccion_actual();
 		}
 	}
 }
@@ -186,7 +185,7 @@ void Controlador_animaciones::componer_vista_lista()
 
 void Controlador_animaciones::calcular_posicion_seleccion_actual()
 {
-	int y=y_inicio_lista+(listado.linea_actual().y);	
+	int y=y_inicio_lista+(listado.linea_actual().y);
 	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y);
 }
 

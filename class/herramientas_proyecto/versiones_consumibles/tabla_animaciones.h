@@ -32,7 +32,7 @@ class Animacion
 					explicit operator bool() const {return duracion_total || lineas.size();}
 	const Linea_animacion&		obtener(size_t v) const {return lineas.at(v);}
 	Linea_animacion&		obtener(size_t v) const {return lineas.at(v);}
-	const Linea_animacion		obtener_para_tiempo_animacion(float);
+	const Linea_animacion		obtener_para_tiempo_animacion(float) const;
 	size_t				size() const {return lineas.size();}
 	const std::string&		acc_nombre() const {return nombre;}
 	float				acc_duracion_total() const {return duracion_total;}

@@ -22,7 +22,7 @@ void Animacion::reajustar_tiempo_frames()
 * animación.
 */
 
-const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t)
+const Linea_animacion& Animacion::obtener_para_tiempo_animacion(float t) const
 {
 	if(lineas.size()==1) return lineas.at(0);
 	else
