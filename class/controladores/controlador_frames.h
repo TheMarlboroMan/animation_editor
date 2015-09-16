@@ -2,10 +2,10 @@
 #define CONTROLADOR_FRAMES
 
 #include <sstream>
+#include <listado_vertical.h>
 
 #include "controlador_base.h"
-#include "../herramientas_proyecto/tabla_animaciones.h"
-#include "../herramientas_proyecto/listado_vertical.h"
+#include "../app/tabla_animaciones.h"
 
 class Controlador_frames:public Controlador_base
 {
@@ -35,7 +35,7 @@ class Controlador_frames:public Controlador_base
 	DLibV::Pantalla&				pantalla;
 	Animacion *					animacion;
 	Tabla_sprites&					tabla_sprites;
-	Listado_vertical<item_listado>			listado;
+	Herramientas_proyecto::Listado_vertical<item_listado>			listado;
 
 	DLibV::Representacion_agrupada_estatica 	rep_listado;
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;

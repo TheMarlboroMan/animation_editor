@@ -7,3 +7,12 @@ DIR_CLASES_APP=./class/app/
 ################################################################################
 #Clases...
 
+$(DIR_O)tabla_sprites.o :\
+$(DIR_CLASES_APP)tabla_sprites.h \
+$(DIR_CLASES_APP)tabla_sprites.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CLASES_APP)tabla_sprites.cpp -o $(DIR_O)tabla_sprites.o
+
+$(DIR_O)tabla_animaciones.o :\
+$(DIR_CLASES_APP)tabla_animaciones.h \
+$(DIR_CLASES_APP)tabla_animaciones.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(DIR_CLASES_APP)tabla_animaciones.cpp -o $(DIR_O)tabla_animaciones.o  

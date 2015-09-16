@@ -3,10 +3,10 @@
 
 #include <sstream>
 #include <fstream>
+#include <listado_vertical.h>
 
 #include "controlador_base.h"
-#include "../herramientas_proyecto/tabla_animaciones.h"
-#include "../herramientas_proyecto/listado_vertical.h"
+#include "../app/tabla_animaciones.h"
 
 class Controlador_animaciones:public Controlador_base
 {
@@ -42,7 +42,7 @@ class Controlador_animaciones:public Controlador_base
 	std::string					nombre_fichero;
 
 	Tabla_animaciones&				tabla_animaciones;
-	Listado_vertical<item_listado>			listado;
+	Herramientas_proyecto::Listado_vertical<item_listado>	listado;
 
 	float						tiempo;
 

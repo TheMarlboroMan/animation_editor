@@ -1,6 +1,8 @@
 #include "controlador_animaciones.h"
 #include "../app/recursos.h"
 
+using namespace Herramientas_proyecto;
+
 Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla, const std::string nombre_fichero)
 	:Controlador_base(DI),
 	pantalla(pantalla),
@@ -84,7 +86,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 				if(tabla_animaciones.size() > 1 && listado.acc_indice_actual() > 0)
 				{
 					size_t indice_actual=listado.item_actual().indice;
-					size_t anterior=listado.item(listado.acc_indice_actual()-1).indice;
+					size_t anterior=listado[listado.acc_indice_actual()-1].indice;
 					tabla_animaciones.intercambiar_animaciones(indice_actual, anterior);
 					componer_lista();
 					recalcular=true;

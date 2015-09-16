@@ -4,7 +4,7 @@
 #include "../class/controladores/controlador_animaciones.h"
 #include "../class/controladores/controlador_frames.h"
 #include "../class/controladores/controlador_selector.h"
-#include "../class/herramientas_proyecto/tabla_animaciones.h"
+#include "../class/app/tabla_animaciones.h"
 
 using namespace App;
 

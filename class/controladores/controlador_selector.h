@@ -3,10 +3,10 @@
 
 #include <sstream>
 #include <algorithm>
+#include <listado_rejilla.h>
 
 #include "controlador_base.h"
-#include "../herramientas_proyecto/tabla_sprites.h"
-#include "../herramientas_proyecto/listado_rejilla.h"
+#include "../app/tabla_sprites.h"
 
 class Controlador_selector:public Controlador_base
 {
@@ -34,7 +34,7 @@ class Controlador_selector:public Controlador_base
 
 	DLibV::Pantalla&				pantalla;
 	Tabla_sprites&					tabla_sprites;
-	Listado_rejilla<item_listado>			listado;
+	Herramientas_proyecto::Listado_rejilla<item_listado>			listado;
 
 	DLibV::Representacion_agrupada_estatica 	rep_listado;
 	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;

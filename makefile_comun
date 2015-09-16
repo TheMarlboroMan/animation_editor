@@ -15,20 +15,19 @@ $(EJECUTABLE) \
 
 $(EJECUTABLE): \
 $(DEP_CLASES_APP) \
-$(DEP_HERRAMIENTAS_PROYECTO) \
 $(DEP_FRAMEWORK_BASE) \
 $(DEP_FRAMEWORK_DERIVADA) \
+$(DEP_HERRAMIENTAS_PROYECTO)\
 $(DEP_CONTROLADORES) \
 $(DIR_O)bootstrap_aplicacion.o \
 main.cpp
-	$(CC) $(CFLAGS_TARGET_FINAL) $(INCLUDES) main.cpp $(DIR_O)bootstrap_aplicacion.o $(DEP_FRAMEWORK_BASE) $(DEP_FRAMEWORK_DERIVADA) $(DEP_HERRAMIENTAS_PROYECTO) $(DEP_CLASES_APP) $(DEP_CONTROLADORES) -o $(EJECUTABLE) $(LIBRERIAS) $(LINKER)
+	$(CC) $(CFLAGS_TARGET_FINAL) $(INCLUDES) main.cpp $(DIR_O)bootstrap_aplicacion.o $(DEP_HERRAMIENTAS_PROYECTO) $(DEP_FRAMEWORK_BASE) $(DEP_FRAMEWORK_DERIVADA) $(DEP_CLASES_APP) $(DEP_CONTROLADORES) -o $(EJECUTABLE) $(LIBRERIAS) $(LINKER)
 
 clean:
 	$(LIMPIAR)
 
 include _makefile_controladores
 include _makefile_clases_app
-include _makefile_herramientas
 include _makefile_framework
 
 $(DIR_O)bootstrap_aplicacion.o :\
