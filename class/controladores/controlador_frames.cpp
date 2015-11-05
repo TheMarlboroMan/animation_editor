@@ -175,7 +175,7 @@ void Controlador_frames::componer_vista_lista()
 
 	for(const auto& itemp : pagina)
 	{
-		Texto * txt=new Texto(pantalla.acc_renderer(), DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
+		Texto * txt=new Texto(DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
 		txt->asignar(itemp.item.texto);
 		txt->establecer_posicion(y_inicio_lista, itemp.y);
 		rep_listado.insertar_representacion(txt);
