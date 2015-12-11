@@ -33,6 +33,7 @@ comparten la misma hoja de sprites aunque representan cosas distintas.
 
 #include <libDan2.h>
 #include <fstream>
+#include <class/lector_txt.h>
 
 extern DLibH::Log_base LOG;
 

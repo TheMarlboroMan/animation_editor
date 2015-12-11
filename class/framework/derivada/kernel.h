@@ -14,7 +14,7 @@ class Kernel_app:public Kernel_base
 {
 	public:
 
-	Kernel_app(DLibH::Controlador_argumentos& carg);
+	Kernel_app(Herramientas_proyecto::Controlador_argumentos& carg);
 	~Kernel_app();
 
 	virtual void inicializar();

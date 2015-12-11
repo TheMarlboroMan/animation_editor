@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include <fstream>
-#include <listado_vertical.h>
+#include <class/listado_vertical.h>
 
 #include "controlador_base.h"
 #include "../app/tabla_animaciones.h"

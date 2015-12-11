@@ -1,6 +1,6 @@
 #include "kernel.h"
 
-Kernel_app::Kernel_app(DLibH::Controlador_argumentos& carg)
+Kernel_app::Kernel_app(Herramientas_proyecto::Controlador_argumentos& carg)
 	:Kernel_base(carg), w(0), h(0), ruta_destino("")
 {
 }
@@ -12,6 +12,7 @@ Kernel_app::~Kernel_app()
 
 std::string Kernel_app::obtener_valor_argumento(const std::string& tipo, const std::vector<std::string>& args)
 {
+	using namespace Herramientas_proyecto;
 	std::string resultado;
 
 	auto it=std::find_if(args.begin(), args.end(), [&tipo](const std::string& arg)
@@ -23,7 +24,7 @@ std::string Kernel_app::obtener_valor_argumento(const std::string& tipo, const s
 	}
 	else
 	{
-		auto ex=DLibH::Herramientas::explotar(*it, '=');
+		auto ex=explotar(*it, '=');
 		if(ex.size()!=2)
 		{
 			throw Kernel_excepcion("ERROR: Parámetro "+tipo+" se usa como img=ruta");

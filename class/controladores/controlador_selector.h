@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include <algorithm>
-#include <listado_rejilla.h>
+#include <class/listado_rejilla.h>
 
 #include "controlador_base.h"
 #include "../app/tabla_sprites.h"

@@ -23,7 +23,8 @@ Frame_sprites Tabla_sprites::obtener(size_t indice)
 
 void Tabla_sprites::cargar(const std::string& ruta)
 {
-	DLibH::Lector_txt L(ruta, '#');
+	using namespace Herramientas_proyecto;
+	Lector_txt L(ruta, '#');
 
 	if(!L)	
 	{
