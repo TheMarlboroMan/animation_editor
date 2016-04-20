@@ -152,11 +152,13 @@ void Controlador_frames::componer_lista()
 {
 	if(!animacion->size()) return;
 
+	auto indice=listado.acc_indice_actual();
 	listado.clear();
 	const size_t total=animacion->size();
 	const auto& v=animacion->acc_lineas();
 	std::stringstream ss;
 	int i=0;
+
 	for(auto& l : v)
 	{
 		ss<<i<<" / "<<total<<" : ("<<l.frame.x<<", "<<l.frame.y<<") ["<<l.duracion<<"s]";
@@ -164,6 +166,9 @@ void Controlador_frames::componer_lista()
 		ss.str("");
 		++i;
 	}
+
+	listado.mut_indice(indice);
+
 }
 
 //TODO: Es común...

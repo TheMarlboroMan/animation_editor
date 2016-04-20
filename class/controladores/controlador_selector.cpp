@@ -94,9 +94,11 @@ void Controlador_selector::dibujar(DLibV::Pantalla& pantalla)
 
 void Controlador_selector::componer_lista()
 {
+	auto indice=listado.acc_indice_actual();
 	listado.clear();
 	const auto& frames=tabla_sprites.acc_sprites();
 	for(auto& par : frames) listado.insertar(item_listado{par.first, par.second});
+	listado.mut_indice(indice);
 }
 
 void Controlador_selector::componer_vista_lista()

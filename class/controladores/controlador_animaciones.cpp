@@ -157,6 +157,8 @@ void Controlador_animaciones::refrescar()
 void Controlador_animaciones::componer_lista()
 {
 	if(! tabla_animaciones.size()) return;
+
+	auto indice=listado.acc_indice_actual();
 	
 	listado.clear();
 	std::stringstream ss;
@@ -169,6 +171,8 @@ void Controlador_animaciones::componer_lista()
 		listado.insertar(item_listado{par.first, ss.str()});
 		ss.str("");
 	}
+
+	listado.mut_indice(indice);
 }
 
 void Controlador_animaciones::componer_vista_lista()
