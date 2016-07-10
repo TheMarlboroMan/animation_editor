@@ -14,6 +14,7 @@ void App::loop_aplicacion(Kernel_app& kernel)
 	{
 		auto& ruta_out=kernel.acc_ruta_destino();
 		auto& ruta_hoja=kernel.acc_ruta_hoja_sprites();
+		DLibV::Fuente_TTF fuente("data/fuentes/akashi.ttf", 12);
 
 		//Comprobar existencia de la hoja de sprites e iniciar la información...
 		std::ifstream test_hoja(ruta_hoja);
@@ -29,8 +30,8 @@ void App::loop_aplicacion(Kernel_app& kernel)
 		Director_estados director_estados;
 
 		//Controladores e interfaces.
-		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones, ruta_out);
-		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla(), tabla_sprites);
+		Controlador_animaciones controlador_animaciones(director_estados, kernel.acc_pantalla(), tabla_animaciones, fuente, ruta_out);
+		Controlador_frames controlador_frames(director_estados, kernel.acc_pantalla(), fuente, tabla_sprites);
 		Controlador_selector controlador_selector(director_estados, kernel.acc_pantalla(), tabla_sprites);
 		Interface_controlador * interface_controlador=&controlador_animaciones;
 

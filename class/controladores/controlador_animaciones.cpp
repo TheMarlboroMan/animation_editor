@@ -3,22 +3,23 @@
 
 using namespace Herramientas_proyecto;
 
-Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla, const std::string nombre_fichero)
+Controlador_animaciones::Controlador_animaciones(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_animaciones& tabla, const DLibV::Fuente_TTF& fuente, const std::string nombre_fichero)
 	:Controlador_base(DI),
 	pantalla(pantalla),
-	rep_listado(true),
-	rep_seleccion_actual(
-			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
-			64, 64, 192),
+	fuente(fuente),
+	rep_listado({0,0}, true),
+	rep_seleccion_actual(DLibV::Representacion_primitiva_poligono::tipo::relleno,
+			{y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea}, 
+			DLibV::rgba8(64, 64, 192, 64)),
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
 	nombre_fichero(nombre_fichero),
 	tabla_animaciones(tabla),
 	listado(pantalla.acc_h()-y_inicio_lista, altura_linea),
 	tiempo(0.0f)
 {
-	rep_listado.establecer_posicion(y_inicio_lista, y_inicio_lista),
-	rep_listado.establecer_modo_blend(DLibV::Representacion::BLEND_ALPHA);
-	rep_animacion.establecer_posicion(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista);
+	rep_listado.ir_a(y_inicio_lista, y_inicio_lista),
+	rep_listado.establecer_modo_blend(DLibV::Representacion::blends::alpha);
+	rep_animacion.ir_a(pantalla.acc_w() - (pantalla.acc_w() / 4), y_inicio_lista);
 	refrescar();
 }
 
@@ -95,7 +96,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			else if(input.es_input_down(Input::I_ENTER) && tabla_animaciones.size())
 			{
 				input.iniciar_input_texto();
-				rep_seleccion_actual.mut_rgb(192, 64, 64);
+				rep_seleccion_actual.mut_rgba(DLibV::rgba8(192, 64, 64, 64));
 			}
 			else if(input.es_input_down(Input::I_GUARDAR) && tabla_animaciones.size())
 			{
@@ -108,7 +109,7 @@ void Controlador_animaciones::loop(Input_base& input, float delta)
 			{
 				input.finalizar_input_texto();
 				input.vaciar_input_texto();
-				rep_seleccion_actual.mut_rgb(64, 64, 192);
+				rep_seleccion_actual.mut_rgba(DLibV::rgba8(64, 64, 192, 64));
 			}
 			else if(input.hay_input_texto())
 			{
@@ -141,7 +142,7 @@ void Controlador_animaciones::dibujar(DLibV::Pantalla& pantalla)
 		rep_animacion.establecer_posicion(0, 0, 0, 0);
 	}
 
-	pantalla.limpiar(0, 0, 0, 255);
+	pantalla.limpiar(DLibV::rgba8(0, 0, 0, 255));
 	rep_seleccion_actual.volcar(pantalla);
 	rep_listado.volcar(pantalla);
 	rep_animacion.volcar(pantalla);
@@ -179,11 +180,11 @@ void Controlador_animaciones::componer_vista_lista()
 {
 	rep_listado.vaciar_grupo();
 	const auto pagina=listado.obtener_pagina();
-	using Texto=DLibV::Representacion_texto_auto_estatica;
+	using Texto=DLibV::Representacion_TTF;
 
 	for(const auto& itemp : pagina)
 	{
-		Texto * txt=new Texto(DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
+		Texto * txt=new Texto(fuente, DLibV::rgba8(255, 255,255, 255), "");
 		txt->asignar(itemp.item.texto);
 		txt->establecer_posicion(y_inicio_lista, itemp.y);
 		rep_listado.insertar_representacion(txt);
@@ -193,7 +194,7 @@ void Controlador_animaciones::componer_vista_lista()
 void Controlador_animaciones::calcular_posicion_seleccion_actual()
 {
 	int y=y_inicio_lista+(listado.linea_actual().y);
-	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y);
+	rep_seleccion_actual.ir_a(y_inicio_lista, y);
 }
 
 void Controlador_animaciones::calcular_animacion_actual()

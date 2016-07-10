@@ -55,7 +55,7 @@ void Kernel_app::obtener_resolucion(const std::vector<std::string>& args)
 	try
 	{
 		auto val_res=obtener_valor_argumento("res=", args);
-		auto ex=DLibH::Herramientas::explotar(val_res, 'x');
+		auto ex=Herramientas_proyecto::explotar(val_res, 'x');
 
 		if(ex.size()!=2)
 		{

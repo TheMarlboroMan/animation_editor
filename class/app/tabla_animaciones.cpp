@@ -1,4 +1,5 @@
 #include "tabla_animaciones.h"
+#include <source/string_utilidades.h>
 
 Linea_animacion::operator bool() const
 {
@@ -195,7 +196,7 @@ void Tabla_animaciones::interpretar_como_titulo(const std::string& linea, Animac
 size_t Tabla_animaciones::interpretar_como_cabecera(const std::string& linea)
 {
 	const char separador='\t';
-	const std::vector<std::string> valores=DLibH::Herramientas::explotar(linea, separador);
+	const std::vector<std::string> valores=Herramientas_proyecto::explotar(linea, separador);
 	if(valores.size()==1)
 	{
 		int id=std::atoi(valores[0].c_str());
@@ -210,7 +211,7 @@ size_t Tabla_animaciones::interpretar_como_cabecera(const std::string& linea)
 void Tabla_animaciones::interpretar_como_linea(const std::string& linea, Animacion& animacion)
 {
 	const char separador='\t';
-	std::vector<std::string> valores=DLibH::Herramientas::explotar(linea, separador);
+	std::vector<std::string> valores=Herramientas_proyecto::explotar(linea, separador);
 	if(valores.size()==2)
 	{
 		int duracion=std::atoi(valores[0].c_str());

@@ -36,8 +36,8 @@ class Controlador_selector:public Controlador_base
 	Tabla_sprites&					tabla_sprites;
 	Herramientas_proyecto::Listado_rejilla<item_listado>			listado;
 
-	DLibV::Representacion_agrupada_estatica 	rep_listado;
-	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
+	DLibV::Representacion_agrupada 			rep_listado;
+	DLibV::Representacion_primitiva_caja 		rep_seleccion_actual;
 
 	size_t						indice_frame;
 

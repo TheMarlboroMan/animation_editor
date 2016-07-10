@@ -1,4 +1,5 @@
 #include "tabla_sprites.h"
+#include <source/string_utilidades.h>
 
 Tabla_sprites::Tabla_sprites(const std::string& ruta)
 {
@@ -40,7 +41,7 @@ void Tabla_sprites::cargar(const std::string& ruta)
 			linea=L.leer_linea();
 			if(!L) break;
 
-			std::vector<std::string> valores=DLibH::Herramientas::explotar(linea, separador);
+			std::vector<std::string> valores=Herramientas_proyecto::explotar(linea, separador);
 			if(valores.size()==7)
 			{
 				Frame_sprites f;

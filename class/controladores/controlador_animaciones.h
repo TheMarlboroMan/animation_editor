@@ -20,7 +20,7 @@ class Controlador_animaciones:public Controlador_base
 		std::string	texto;
 	};
 	
-							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&, const std::string nombre_fichero);
+							Controlador_animaciones(Director_estados &DI, DLibV::Pantalla&, Tabla_animaciones&, const DLibV::Fuente_TTF&, const std::string nombre_fichero);
 
 	virtual void 					preloop(Input_base& input, float delta);
 	virtual void 					postloop(Input_base& input, float delta);
@@ -35,9 +35,10 @@ class Controlador_animaciones:public Controlador_base
 	private:
 
 	DLibV::Pantalla&				pantalla;
-	DLibV::Representacion_agrupada_estatica 	rep_listado;
-	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
-	DLibV::Representacion_bitmap_estatica 		rep_animacion;
+	const DLibV::Fuente_TTF&			fuente;
+	DLibV::Representacion_agrupada 			rep_listado;
+	DLibV::Representacion_primitiva_caja 		rep_seleccion_actual;
+	DLibV::Representacion_bitmap	 		rep_animacion;
 	Animacion					animacion;
 	std::string					nombre_fichero;
 

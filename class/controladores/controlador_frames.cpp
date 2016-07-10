@@ -1,20 +1,21 @@
 #include "controlador_frames.h"
 #include "../app/recursos.h"
 
-Controlador_frames::Controlador_frames(Director_estados &DI, DLibV::Pantalla& pantalla, Tabla_sprites& ts)
+Controlador_frames::Controlador_frames(Director_estados &DI, DLibV::Pantalla& pantalla, const DLibV::Fuente_TTF& fuente, Tabla_sprites& ts)
 	:Controlador_base(DI), 
-	pantalla(pantalla), animacion(nullptr), tabla_sprites(ts), 
+	pantalla(pantalla), fuente(fuente), 
+	animacion(nullptr), tabla_sprites(ts), 
 	listado(pantalla.acc_h()-y_inicio_lista, altura_linea),
-	rep_listado(true),
-	rep_seleccion_actual(
-			DLibH::Herramientas_SDL::nuevo_sdl_rect(y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea),
-			64, 64, 192),
+	rep_listado({0,0}, true),
+	rep_seleccion_actual(DLibV::Representacion_primitiva_poligono::tipo::relleno, 
+			{y_inicio_lista, y_inicio_lista, pantalla.acc_w()-(2*y_inicio_lista), altura_linea},
+			DLibV::rgba8(64, 64, 192, 64)),
 	rep_animacion(DLibV::Gestor_texturas::obtener(10)),
 	tiempo_pulsado(0.0f),
 	indice_frame_nuevo(1)
 {
-	rep_listado.establecer_posicion(y_inicio_lista, y_inicio_lista),
-	rep_animacion.establecer_posicion(pantalla.acc_w() / 2, y_inicio_lista);
+	rep_listado.ir_a(y_inicio_lista, y_inicio_lista),
+	rep_animacion.ir_a(pantalla.acc_w() / 2, y_inicio_lista);
 }
 
 void Controlador_frames::preloop(Input_base& input, float delta)
@@ -128,7 +129,7 @@ void Controlador_frames::loop(Input_base& input, float delta)
 
 void Controlador_frames::dibujar(DLibV::Pantalla& pantalla)
 {
-	pantalla.limpiar(0, 0, 0, 255);
+	pantalla.limpiar(DLibV::rgba8(0, 0, 0, 255));
 	rep_seleccion_actual.volcar(pantalla);
 	rep_listado.volcar(pantalla);
 	rep_animacion.volcar(pantalla);
@@ -176,13 +177,13 @@ void Controlador_frames::componer_vista_lista()
 {
 	rep_listado.vaciar_grupo();
 	const auto pagina=listado.obtener_pagina();
-	using Texto=DLibV::Representacion_texto_auto_estatica;
+	using Texto=DLibV::Representacion_TTF;
 
 	for(const auto& itemp : pagina)
 	{
-		Texto * txt=new Texto(DLibV::Gestor_superficies::obtener(Recursos_graficos::RS_FUENTE_BASE), "");
+		Texto * txt=new Texto(fuente, DLibV::rgba8(255, 255, 255, 255), "");
 		txt->asignar(itemp.item.texto);
-		txt->establecer_posicion(y_inicio_lista, itemp.y);
+		txt->ir_a(y_inicio_lista, itemp.y);
 		rep_listado.insertar_representacion(txt);
 	}
 }
@@ -191,7 +192,7 @@ void Controlador_frames::componer_vista_lista()
 void Controlador_frames::calcular_posicion_seleccion_actual()
 {
 	int y=y_inicio_lista+(listado.linea_actual().y);	
-	rep_seleccion_actual.establecer_posicion(y_inicio_lista, y);
+	rep_seleccion_actual.ir_a(y_inicio_lista, y);
 }
 
 void Controlador_frames::calcular_representacion_frame_actual()

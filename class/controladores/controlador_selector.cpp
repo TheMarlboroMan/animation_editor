@@ -5,14 +5,14 @@ Controlador_selector::Controlador_selector(Director_estados &DI, DLibV::Pantalla
 	:Controlador_base(DI),
 	pantalla(pantalla), tabla_sprites(ts), 
 	listado(pantalla.acc_w()-(2*inicio_lista), pantalla.acc_h()-(2*inicio_lista), dim_item_lista, dim_item_lista),
-	rep_listado(true),
+	rep_listado({0,0},true),
 	rep_seleccion_actual(
-			DLibH::Herramientas_SDL::nuevo_sdl_rect(0, 0, dim_item_lista, dim_item_lista),
-			64, 64, 192),
+			DLibV::Representacion_primitiva_poligono::tipo::relleno, 
+			{0, 0, dim_item_lista, dim_item_lista},
+			DLibV::rgba8(64, 64, 192, 128)),
 	indice_frame(0)
 {
-	rep_listado.establecer_posicion(inicio_lista, inicio_lista);
-	rep_seleccion_actual.establecer_alpha(128);
+	rep_listado.ir_a(inicio_lista, inicio_lista);
 	componer_lista();
 	componer_vista_lista();
 	calcular_posicion_seleccion_actual();
@@ -87,7 +87,7 @@ void Controlador_selector::loop(Input_base& input, float delta)
 
 void Controlador_selector::dibujar(DLibV::Pantalla& pantalla)
 {
-	pantalla.limpiar(0, 0, 0, 255);
+	pantalla.limpiar(DLibV::rgba8(0, 0, 0, 255));
 	rep_listado.volcar(pantalla);
 	rep_seleccion_actual.volcar(pantalla);
 }
@@ -106,7 +106,7 @@ void Controlador_selector::componer_vista_lista()
 	rep_listado.vaciar_grupo();
 
 	const auto pagina=listado.obtener_pagina();
-	using BMP=DLibV::Representacion_bitmap_estatica;
+	using BMP=DLibV::Representacion_bitmap;
 
 	size_t wl=listado.acc_w_item();
 	size_t hl=listado.acc_h_item();
@@ -128,5 +128,5 @@ void Controlador_selector::componer_vista_lista()
 void Controlador_selector::calcular_posicion_seleccion_actual()
 {
 	const auto& i=listado.linea_actual();
-	rep_seleccion_actual.establecer_posicion(inicio_lista+i.x, inicio_lista+i.y);
+	rep_seleccion_actual.ir_a(inicio_lista+i.x, inicio_lista+i.y);
 }

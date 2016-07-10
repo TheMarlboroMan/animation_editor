@@ -13,7 +13,7 @@ class Controlador_frames:public Controlador_base
 	//Interface pública.
 	public:
 	
-							Controlador_frames(Director_estados &DI, DLibV::Pantalla&, Tabla_sprites&);
+							Controlador_frames(Director_estados &DI, DLibV::Pantalla&, const DLibV::Fuente_TTF&, Tabla_sprites&);
 
 	virtual void 					preloop(Input_base& input, float delta);
 	virtual void 					postloop(Input_base& input, float delta);
@@ -33,13 +33,14 @@ class Controlador_frames:public Controlador_base
 	};
 
 	DLibV::Pantalla&				pantalla;
+	const DLibV::Fuente_TTF&			fuente;
 	Animacion *					animacion;
 	Tabla_sprites&					tabla_sprites;
 	Herramientas_proyecto::Listado_vertical<item_listado>			listado;
 
-	DLibV::Representacion_agrupada_estatica 	rep_listado;
-	DLibV::Representacion_primitiva_caja_estatica 	rep_seleccion_actual;
-	DLibV::Representacion_bitmap_estatica 		rep_animacion;
+	DLibV::Representacion_agrupada 			rep_listado;
+	DLibV::Representacion_primitiva_caja	 	rep_seleccion_actual;
+	DLibV::Representacion_bitmap	 		rep_animacion;
 
 	float						tiempo_pulsado;
 	size_t						indice_frame_nuevo;
