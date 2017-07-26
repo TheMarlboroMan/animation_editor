@@ -12,9 +12,14 @@ MKDIR=mkdir -p
 LIMPIAR=rm objects/*; rm ./$(EJECUTABLE); touch objects/dummy;
 
 DIR_BASE=/home/dani/programacion/
-DIR_LIBDAN2=$(DIR_BASE)libdansdl2
-DIR_HERRAMIENTAS_PROYECTO=$(DIR_BASE)herramientas_proyecto/
-DIR_O_HERRAMIENTAS_PROYECTO=$(DIR_BASE)herramientas_proyecto/objects/
+
+DIR_LIBDAN2=./dependencies/libdansdl-frozen
+DIR_HERRAMIENTAS_PROYECTO=./dependencies/herramientas_proyecto-frozen
+DIR_O_HERRAMIENTAS_PROYECTO=./dependencies/herramientas_proyecto-frozen/objects/
+
+#DIR_LIBDAN2=$(DIR_BASE)libdansdl2
+#DIR_HERRAMIENTAS_PROYECTO=$(DIR_BASE)herramientas_proyecto/
+#DIR_O_HERRAMIENTAS_PROYECTO=$(DIR_BASE)herramientas_proyecto/objects/
 DIR_CAPA_COMPATIBILIDAD_LIBDANSDL2=$(DIR_BASE)/capa_compatibilidad_libdansdl2
 
 LINKER=-L$(DIR_LIBDAN2) -lDanSDL2 -L. -lSDL2 -lSDL2_mixer -lSDL2_ttf -lSDL2_image
