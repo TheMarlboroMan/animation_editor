@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(animation_editor)
 
+option(BUILD_TESTS "Build test code" ON)
 option(BUILD_DEBUG "Build a debug release" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -15,14 +16,12 @@ endif()
 
 add_compile_options(-Wall -Wextra -Wundef -Wcast-align -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -Woverloaded-virtual -Wno-deprecated -ansi -pedantic -fno-rtti)
 
-#TODO: Should also allow for c++14
 
-#In a system where the libs are not installed, add them.
-#include_directories(../libdansdl2/include)
-#include_directories(../libdansdl2-tools/include)
-#include_directories(../log/include)
-#include_directories(../dfw/include)
-#include_directories(../tools/include)
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include/tile_editor")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include/dfw_impl")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include/input")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include/controller")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include")
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/src")
 
@@ -40,9 +39,22 @@ set_target_properties(dansdl2 PROPERTIES IMPORTED_LOCATION /usr/local/lib/libdan
 set_target_properties(ldtools PROPERTIES IMPORTED_LOCATION /usr/local/lib/libldtools.a)
 set_target_properties(dfw PROPERTIES IMPORTED_LOCATION /usr/local/lib/libdfw.a)
 
+#Virtual library so we don't have to build again and again for all tests...
+add_library(applib STATIC ${SOURCE})
+set_target_properties(applib PROPERTIES OUTPUT_NAME applib)
+
+if(${BUILD_TESTS})
+
+	add_executable(loader src/tests/animation_loader.cpp)
+	target_link_libraries(loader applib tools ldtools dansdl2 dfw lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL stdc++fs)
+
+	add_executable(saver src/tests/animation_saver.cpp)
+	target_link_libraries(saver applib tools ldtools dansdl2 dfw lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL stdc++fs)
+endif()
+
 #Configure the executable, we want it into the "build directory" and we want all resources copied
 #to the build directory.
-add_executable(animation_editor src/main.cpp ${SOURCE})
-set_target_properties(animation_editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY build)
-add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build)
-target_link_libraries(animation_editor dfw tools dansdl2 ldtools lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL)
+#add_executable(animation_editor src/main.cpp ${SOURCE})
+#set_target_properties(animation_editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY build)
+#add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build)
+#target_link_libraries(animation_editor dfw tools dansdl2 ldtools lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL)
