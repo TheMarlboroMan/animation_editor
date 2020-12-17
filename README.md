@@ -1,20 +1,6 @@
 # animation_editor
 
 ## TODO:
-- solve
-	- animation line
-		- double duration
-		- double start time
-		- tile frame id
-	- animation
-		- vector of [id + animation]
-	- animation loader
-		- roll your own, do not use animation_table
-		- structure goes *title (starts new) -> !id -> duration[TAB]frame_id
-	- animation saver
-		- roll your own, do not use animation_table
-		- structure goes *title (starts new) -> !id -> duration[TAB]frame_id
-
 - main controller
 	- display hud
 		- X / total animations [total frames in sheet]
