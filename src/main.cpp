@@ -1,5 +1,5 @@
-#include "include/dfwimpl/config.h"
-#include "include/dfwimpl/state_driver.h"
+#include "dfwimpl/config.h"
+#include "dfwimpl/state_driver.h"
 
 #include <lm/file_logger.h>
 #include <lm/sentry.h>
@@ -14,8 +14,7 @@
 int main(int argc, char ** argv)
 {
 	//Init libdansdl2 log.
-	ldt::log_lsdl::set_type(ldt::log_lsdl::types::file);
-	ldt::log_lsdl::set_filename("logs/libdansdl2.log");
+	ldt::log_lsdl::set_type(ldt::log_lsdl::types::null);
 
 	//Argument controller.
 	tools::arg_manager carg(argc, argv);
@@ -30,7 +29,7 @@ int main(int argc, char ** argv)
 		if(!ldt::sdl_init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK)) {
 			throw std::runtime_error("unable to init sdl2");
 		}
-		
+
 		lm::log(log_app, lm::lvl::info)<<"creating kernel..."<<std::endl;
 		dfw::kernel kernel(log_app, carg);
 

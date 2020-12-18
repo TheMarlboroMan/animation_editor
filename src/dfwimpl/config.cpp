@@ -24,7 +24,7 @@ dfw::input_description dfwimpl::input_description_from_config_token(const rapidj
 }
 
 std::vector<int> dfwimpl::config_token_from_input_description(const dfw::input_description& _id) {
-	
+
 	return std::vector<int>{
 		input_description_int_from_type(_id.type),
 		_id.device,

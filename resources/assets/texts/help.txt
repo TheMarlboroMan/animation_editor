@@ -1,0 +1,8 @@
+= HELP =
+
+== ANIMATION LIST ==
+
+arrows : select animation
+pageup - pagedown : change animation order.
+
+

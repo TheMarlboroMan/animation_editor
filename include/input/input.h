@@ -8,7 +8,16 @@ escape=0,
 up,
 down,
 left,
-right
+right,
+pageup,
+pagedown,
+enter,
+save,
+load,
+lctrl,
+del,
+insert,
+f1
 };
 
 }

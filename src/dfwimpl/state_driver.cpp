@@ -1,6 +1,10 @@
-#include "../../include/dfwimpl/state_driver.h"
-#include "../../include/input/input.h"
-#include "../../include/controller/states.h"
+#include "dfwimpl/state_driver.h"
+#include "input/input.h"
+#include "controller/states.h"
+#include "app/definitions.h"
+#include "app/animation_loader.h"
+#include "app/animation_saver.h"
+
 
 #include <lm/sentry.h>
 #include <tools/string_utils.h>
@@ -10,8 +14,10 @@
 using namespace dfwimpl;
 
 state_driver::state_driver(dfw::kernel& kernel, dfwimpl::config& c)
-	:state_driver_interface(controller::t_states::state_min),
-	config(c), log(kernel.get_log()) {
+	:state_driver_interface(controller::t_states::state_main),
+	config(c),
+	log(kernel.get_log()),
+	message_manager(30) {
 
 	lm::log(log, lm::lvl::info)<<"setting state check function..."<<std::endl;
 
@@ -37,23 +43,49 @@ state_driver::state_driver(dfw::kernel& kernel, dfwimpl::config& c)
 	lm::log(log, lm::lvl::info)<<"virtualizing input..."<<std::endl;
 	virtualize_input(kernel.get_input());
 
+	lm::log(log, lm::lvl::info)<<"state driver will check input parameters and start up"<<std::endl;
+
+	start_application(kernel);
 	lm::log(log, lm::lvl::info)<<"state driver fully constructed"<<std::endl;
+
 }
 
 void state_driver::prepare_video(dfw::kernel& kernel) {
 
+	const auto argman=kernel.get_arg_manager();
+
+	int w=config.int_from_path("video:window_w_px"),
+	    h=config.int_from_path("video:window_h_px");
+
+	if(argman.exists("-w") && argman.arg_follows("-w")) {
+
+		const std::string& window_size_str=argman.get_following("-w");
+
+		auto xpos=window_size_str.find("x");
+		if(std::string::npos==xpos) {
+			throw std::runtime_error("-w parameter must be specified in wxh");
+		}
+
+		w=std::stoi(window_size_str.substr(0, xpos));
+		h=std::stoi(window_size_str.substr(xpos+1));
+
+		lm::log(log, lm::lvl::info)<<"window size specified by command line as "<<window_size_str<<" ["<<w<<"x"<<h<<"]"<<std::endl;
+	}
+
 	kernel.init_video_system({
-		config.int_from_path("video:window_w_px"),
-		config.int_from_path("video:window_h_px"),
-		config.int_from_path("video:window_w_logical"),
-		config.int_from_path("video:window_h_logical"),
-		config.string_from_path("video:window_title"),
-		config.bool_from_path("video:window_show_cursor"),
+		w,
+		h,
+		w,
+		h,
+		"Animation editor",
+		false,
 		config.get_screen_vsync()
 	});
 
 	auto& screen=kernel.get_screen();
 	screen.set_fullscreen(config.bool_from_path("video:fullscreen"));
+
+	ttf_manager.insert(animation_editor::definitions::main_font_name, animation_editor::definitions::main_font_size, "resources/assets/fonts/BebasNeue-Regular.ttf");
 }
 
 void state_driver::prepare_audio(dfw::kernel& kernel) {
@@ -77,7 +109,16 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 		{input_description_from_config_token(config.token_from_path("input:left")), input::left},
 		{input_description_from_config_token(config.token_from_path("input:right")), input::right},
 		{input_description_from_config_token(config.token_from_path("input:up")), input::up},
-		{input_description_from_config_token(config.token_from_path("input:down")), input::down}
+		{input_description_from_config_token(config.token_from_path("input:down")), input::down},
+		{input_description_from_config_token(config.token_from_path("input:pageup")), input::pageup},
+		{input_description_from_config_token(config.token_from_path("input:pagedown")), input::pagedown},
+		{input_description_from_config_token(config.token_from_path("input:enter")), input::enter},
+		{input_description_from_config_token(config.token_from_path("input:save")), input::save},
+		{input_description_from_config_token(config.token_from_path("input:load")), input::load},
+		{input_description_from_config_token(config.token_from_path("input:lctrl")), input::lctrl},
+		{input_description_from_config_token(config.token_from_path("input:del")), input::del},
+		{input_description_from_config_token(config.token_from_path("input:insert")), input::insert},
+		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1}
 	};
 
 	kernel.init_input_system(pairs);
@@ -94,26 +135,114 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 */
 }
 
-void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
+void state_driver::register_controllers(
+	dfw::kernel& _kernel
+) {
 
 	auto reg=[this](ptr_controller& _ptr, int _i, dfw::controller_interface * _ci) {
 		_ptr.reset(_ci);
 		register_controller(_i, *_ptr);
 	};
 
+	reg(
+		c_main,
+		controller::t_states::state_main,
+		new controller::main(
+			log,
+			ttf_manager,
+			message_manager,
+			ticker,
+			animations,
+			visuals,
+			_kernel.get_screen().get_rect(),
+			config.int_from_path("app:margin_top_list"),
+			config.int_from_path("app:h_list_item")
+		)
+	);
+	reg(
+		c_help,
+		controller::t_states::state_help,
+		new controller::help(
+			log,
+			ttf_manager,
+			_kernel.get_screen().get_w(),
+			_kernel.get_screen().get_h()
+		)
+	);
+	reg(
+		c_file_browser,
+		controller::t_states::state_file_browser,
+		new controller::file_browser(
+			log,
+			ttf_manager,
+			_kernel.get_screen().get_w()
+		)
+	);
 	//[new-controller-mark]
 }
 
-void state_driver::prepare_state(int /*next*/, int /*current*/) {
+void state_driver::prepare_state(
+	int _next,
+	int _current
+) {
 
-/*
-	switch(next) {
-		case t_states::state_placeholder:
+	//This looks like a switchboard :D.
+
+
+	controller::file_browser * file_browser=static_cast<controller::file_browser *>(c_file_browser.get());
+	controller::main * main=static_cast<controller::main *>(c_main.get());
+
+	using namespace controller;
+	switch(_next) {
+		case t_states::state_file_browser:
+
+			switch(_current) {
+
+				case t_states::state_main:
+					file_browser->intra_set_allow_create(main->intra_get_file_browser_allow_new());
+				break;
+			}
+
+		break;
+		case t_states::state_main:
+
+			switch(_current) {
+
+				case t_states::state_file_browser:
+					if(!file_browser->intra_get_success()) {
+
+						return;
+					}
+
+					//Save into new/same file.
+					if(main->intra_get_file_browser_allow_new()) {
+
+						save(file_browser->intra_get_result());
+					}
+					//Load from file.
+					else {
+
+						if(load(file_browser->intra_get_result())) {
+							main->intra_set_update_on_awake(true);
+						}
+					}
+				break;
+
+				case t_states::state_main:
+
+					if(!current_filename.size()) {
+
+						message_manager.add("no session open, use lctrl+s");
+					}
+					else {
+						save(current_filename);
+					}
+				break;
+			}
 		break;
 		default:
 		break;
 	}
-*/
 }
 
 void state_driver::common_pre_loop_input(dfw::input& input, float /*delta*/) {
@@ -124,8 +253,13 @@ void state_driver::common_pre_loop_input(dfw::input& input, float /*delta*/) {
 	}
 }
 
-void state_driver::common_loop_input(dfw::input& /*input*/, float /*delta*/) {
+void state_driver::common_loop_input(
+	dfw::input& /*input*/,
+	float _delta
+) {
 
+	ticker.tick(_delta);
+	message_manager.tick(_delta);
 }
 
 void state_driver::common_pre_loop_step(float /*delta*/) {
@@ -144,5 +278,74 @@ void state_driver::virtualize_input(dfw::input& input) {
 		input().virtualize_joystick_hats(i);
 		input().virtualize_joystick_axis(i, 15000);
 		lm::log(log, lm::lvl::info)<<"Joystick virtualized "<<i<<std::endl;
+	}
+}
+
+void state_driver::start_application(
+	dfw::kernel& _kernel
+) {
+	const auto argman=_kernel.get_arg_manager();
+
+	if(argman.exists("-i") && argman.arg_follows("-i")) {
+
+		visuals.load_texture(argman.get_following("-i"));
+	}
+	else {
+
+		throw std::runtime_error("must use -i parameter to load the sprite sheet image");
+	}
+
+	if(argman.exists("-s") && argman.arg_follows("-s")) {
+
+		visuals.load_table(argman.get_following("-s"));
+	}
+	else {
+
+		throw std::runtime_error("must use -s parameter to load the sprite sheet table");
+	}
+
+	if(argman.exists("-f") && argman.arg_follows("-f")) {
+
+		load(argman.get_following("-f"));
+	}
+	else {
+
+		message_manager.add("ready, press f1 for help");
+	}
+}
+
+void state_driver::save(
+	const std::string& _filename
+) {
+
+	try {
+		animation_editor::animation_saver saver;
+		saver.to_file(_filename, animations);
+		current_filename=_filename;
+		message_manager.add(std::string{"saved to "}+current_filename);
+	}
+	catch(std::exception& e) {
+
+		message_manager.add(std::string{"save failed: "}+e.what());
+	}
+}
+
+bool state_driver::load(
+	const std::string& _filename
+) {
+
+	try {
+
+		animation_editor::animation_loader loader;
+		auto loaded=loader.from_file(_filename);
+		std::swap(loaded, animations);
+		current_filename=_filename;
+		message_manager.add(std::string{"loaded from "}+current_filename);
+		return true;
+	}
+	catch(std::exception& e) {
+
+		message_manager.add(std::string{"loading failed: "}+e.what());
+		return false;
 	}
 }

@@ -7,14 +7,15 @@
 using namespace animation_editor;
 
 animations animation_loader::from_string(
-	const std::string& _input
+	const std::string& _input,
+	bool _strict
 ) {
 
 	animations result;
 	animation anim;
-	auto insert_animation=[&anim, &result]() {
+	auto insert_animation=[&anim, &result, _strict]() {
 
-		if(!anim.frames.size()) {
+		if(!anim.frames.size() && _strict) {
 
 			throw std::runtime_error(std::string{"invalid animation contents, empty animation with no frames, current animation: "}+anim.name);
 		}
@@ -104,8 +105,9 @@ animations animation_loader::from_string(
 }
 
 animations animation_loader::from_file(
-	const std::string& _filename
+	const std::string& _filename,
+	bool _strict
 ) {
 
-	return from_string(tools::dump_file(_filename));
+	return from_string(tools::dump_file(_filename), _strict);
 }

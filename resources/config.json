@@ -1,0 +1,39 @@
+{
+	"app":{
+		"margin_top_list": 32,
+		"h_list_item": 64
+	},
+	"audio":{
+		"audio_buffers":1024,
+		"audio_channels":16,
+		"audio_out":2,
+		"audio_ratio":44100,
+		"music_volume":127,
+		"sound_volume":127
+	},
+	"input":{
+		"down":[0, 0, 81],
+		"left":[0, 0, 80],
+		"right":[0, 0, 79],
+		"up":[0, 0, 82],
+		"pageup":[0, 0, 75],
+		"pagedown":[0, 0, 78],
+		"enter":[0, 0, 40],
+		"save":[0,0,22],
+		"load":[0,0,15],
+		"lctrl":[0, 0, 224],
+		"f1":[0,0, 58],
+		"del":[0,0,76],
+		"insert":[0,0,73]
+	},
+	"meta":{
+		"v":1
+	},
+	"video":{
+		"double_buffer":1,
+		"fullscreen":false,
+		"vsync":false,
+		"window_h_px":500,
+		"window_w_px":700
+	}
+}

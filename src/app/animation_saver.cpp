@@ -9,9 +9,10 @@ using namespace animation_editor;
 
 
 std::string animation_saver::to_string(
-	const animations& _animations
+	const animations& _animations,
+	bool _strict
 ) {
-	if(!_animations.size()) {
+	if(!_animations.size() && _strict) {
 
 		throw std::runtime_error("no animations found");
 	}
@@ -25,7 +26,7 @@ std::string animation_saver::to_string(
 		}
 		ids.insert(anim.id);
 
-		if(!anim.frames.size()) {
+		if(!anim.frames.size() && _strict) {
 
 			throw std::runtime_error(std::string{"no frames in animation "}+anim.name);
 		}
@@ -44,16 +45,17 @@ std::string animation_saver::to_string(
 	return ss.str();
 }
 
-bool animation_saver::to_file(
+void animation_saver::to_file(
 	const std::string& _filename,
-	const animations& _animations
+	const animations& _animations,
+	bool _strict
 ) {
 
 	std::ofstream file{_filename};
 	if(!file) {
 
-		return false;
+		throw std::runtime_error("could not write to file");
 	}
 
-	file<<to_string(_animations);
+	file<<to_string(_animations, _strict);
 }

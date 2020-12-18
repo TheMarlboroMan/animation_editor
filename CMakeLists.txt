@@ -50,11 +50,15 @@ if(${BUILD_TESTS})
 
 	add_executable(saver src/tests/animation_saver.cpp)
 	target_link_libraries(saver applib tools ldtools dansdl2 dfw lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL stdc++fs)
+
 endif()
 
 #Configure the executable, we want it into the "build directory" and we want all resources copied
 #to the build directory.
-#add_executable(animation_editor src/main.cpp ${SOURCE})
-#set_target_properties(animation_editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY build)
-#add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build)
-#target_link_libraries(animation_editor dfw tools dansdl2 ldtools lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL)
+add_executable(animation_editor src/main.cpp)
+set_target_properties(animation_editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY build)
+add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/resources)
+add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/logs)
+add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build/resources)
+add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../example ./build)
+target_link_libraries(animation_editor applib dfw tools ldtools dansdl2 lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL)
