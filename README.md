@@ -6,6 +6,7 @@
 		- the preview, how will it resize as to not collide with the others?
 			- it will calculate how to resize the highest frame of each animation to the static list height (run through the frame list, get the highest and calculate a factor.
 				- and it will reload each time the list changes, of course.
+	- color in red animations whose id is repeated!
 	- rename animation
 	- change animation id [the number]
 		- check if it does not exist...
