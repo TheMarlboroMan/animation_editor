@@ -118,6 +118,9 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 		{input_description_from_config_token(config.token_from_path("input:lctrl")), input::lctrl},
 		{input_description_from_config_token(config.token_from_path("input:del")), input::del},
 		{input_description_from_config_token(config.token_from_path("input:insert")), input::insert},
+		{input_description_from_config_token(config.token_from_path("input:rename")), input::rename},
+		{input_description_from_config_token(config.token_from_path("input:change_id")), input::change_id},
+		{input_description_from_config_token(config.token_from_path("input:backspace")), input::backspace},
 		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1}
 	};
 
@@ -178,6 +181,22 @@ void state_driver::register_controllers(
 			_kernel.get_screen().get_w()
 		)
 	);
+	reg(
+		c_rename_animation, 
+		controller::t_states::state_rename_animation, 
+		new controller::rename_animation(
+			log,
+			ttf_manager
+		)
+	);
+	reg(
+		c_change_animation_id, 
+		controller::t_states::state_change_animation_id, 
+		new controller::change_animation_id(
+			log,
+			ttf_manager
+		)
+	);
 	//[new-controller-mark]
 }
 
@@ -188,12 +207,30 @@ void state_driver::prepare_state(
 
 	//This looks like a switchboard :D.
 
-
 	controller::file_browser * file_browser=static_cast<controller::file_browser *>(c_file_browser.get());
 	controller::main * main=static_cast<controller::main *>(c_main.get());
+	controller::rename_animation * rename=static_cast<controller::rename_animation *>(c_rename_animation.get());
+	controller::change_animation_id * change_id=static_cast<controller::change_animation_id *>(c_change_animation_id.get());
 
 	using namespace controller;
 	switch(_next) {
+
+		case t_states::state_rename_animation:
+
+			rename->intra_set_animation(
+				&animations.at(main->intra_get_current_index())
+			);
+
+		break;
+
+		case t_states::state_change_animation_id:
+
+			change_id->intra_set_animation(
+				&animations.at(main->intra_get_current_index())
+			);
+
+		break;
+
 		case t_states::state_file_browser:
 
 			switch(_current) {
@@ -226,6 +263,11 @@ void state_driver::prepare_state(
 							main->intra_set_update_on_awake(true);
 						}
 					}
+				break;
+
+				case t_states::state_rename_animation:
+				case t_states::state_change_animation_id:
+					main->intra_set_update_on_awake(true);
 				break;
 
 				case t_states::state_main:

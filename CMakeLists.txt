@@ -61,4 +61,4 @@ add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/res
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/logs)
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build/resources)
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../example ./build)
-target_link_libraries(animation_editor applib dfw tools ldtools dansdl2 lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL)
+target_link_libraries(animation_editor applib dfw tools ldtools dansdl2 lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL stdc++fs)

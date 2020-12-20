@@ -1,17 +1,6 @@
 # animation_editor
 
 ## TODO:
-- main controller
-	- display animations as vertical_list [name, total time, preview]
-		- the preview, how will it resize as to not collide with the others?
-			- it will calculate how to resize the highest frame of each animation to the static list height (run through the frame list, get the highest and calculate a factor.
-				- and it will reload each time the list changes, of course.
-	- color in red animations whose id is repeated!
-	- rename animation
-	- change animation id [the number]
-		- check if it does not exist...
-- preview controller
-	- shows on top of the list
 - animation controller
 	- display hud
 		- x / total frames in animation [total frames in sheet]
@@ -27,8 +16,18 @@
 - frame selection controller
 	- show all frames as grid list of fixed size
 	- pick one
-- rename animation controller
-- change animation id controller
+- preview controller
+	- shows on top of the list, shows the animation at its real size
+
+## BUGS
+
+- screen clear with rgba does not respect alpha.
+- exiting on rename / change id fully resets the list, should keep the page
+	and current selection.
+
+## IDEAS
+
+- The animation preview is a static 32x32... could be adjusted.
 
 ## use
 

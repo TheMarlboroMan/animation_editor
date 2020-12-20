@@ -5,8 +5,10 @@
 #include <tools/json.h>
 #include <tools/file_utils.h>
 #include <ldv/ttf_representation.h>
+#include <ldv/bitmap_representation.h>
 #include <sstream>
 #include <numeric>
+#include <map>
 
 using namespace controller;
 
@@ -114,6 +116,18 @@ void main::loop(
 		}
 	}
 
+	if(_input.is_input_down(input::change_id)) {
+
+		change_animation_id();
+		return;
+	}
+
+	if(_input.is_input_down(input::rename)) {
+
+		rename_animation();
+		return;	
+	}
+
 	if(_input.is_input_down(input::pageup)) {
 
 		move_animation_up();
@@ -163,28 +177,50 @@ void main::draw(
 
 		std::stringstream ss;
 
-		int duration=std::accumulate(
-			std::begin(item.item.frames),
-			std::end(item.item.frames),
-			0,
-			[](int _carry, const animation_editor::frame& _frame) {
+		ss<<item.item.animation.name
+			<<" ["<<item.item.animation.id
+			<<", "<<item.item.duration<<"ms, "
+			<<item.item.animation.frames.size()<<" frames]";
 
-				return _carry+_frame.duration_ms;
-			}
-		);
+		auto color=std::find(
+			std::begin(repeated_ids),
+			std::end(repeated_ids),
+			item.item.animation.id
+		)==std::end(repeated_ids)
+			? ldv::rgba8(255, 255, 255, 128)
+			: ldv::rgba8(255, 0, 0, 128);
 
-		ss<<item.item.name<<" ["<<item.item.id<<", "<<duration<<"ms]";
+		if(animation_list.get_current_index()==item.index) {
+
+			color.a=255;
+		}
 
 		ldv::ttf_representation txt(
 			ttf_manager.get(animation_editor::definitions::main_font_name, animation_editor::definitions::main_font_size),
-			animation_list.get_current_index()==item.index
-				? ldv::rgba8(255, 255, 255, 255)
-				: ldv::rgba8(255, 255, 255, 128),
-			ss.str()
+			color,
+			""
 		);
 
-		txt.go_to({0, item.y+margin_top_list});
+		const int max_w{ (display_rect.w / 4) * 3};
+		int y=item.y+margin_top_list;
+
+		txt.set_max_width(max_w);
+		txt.set_text(ss.str());
+		txt.go_to({0, y});
 		txt.draw(_screen);
+
+		if(!item.item.animation.frames.size()) {
+
+			continue;
+		}
+		//Now for the animation...
+		ldv::bitmap_representation bmp(
+			visuals.get_texture(),
+			{max_w, y, 32, 32},
+			rect_for_animation_time(ticker.get(), item.item)
+		);
+
+		bmp.draw(_screen);
 	}
 }
 
@@ -209,10 +245,40 @@ void main::update_hud() {
 
 void main::update_list() {
 
+	std::map<std::size_t, std::size_t> id_count;
+
 	animation_list.clear();
 	for(const auto& anim : animations) {
 
-		animation_list.insert(anim);
+		int duration=std::accumulate(
+			std::begin(anim.frames),
+			std::end(anim.frames),
+			0,
+			[](int _carry, const animation_editor::frame& _frame) {
+
+				return _carry+_frame.duration_ms;
+			}
+		);
+
+		if(!id_count.count(anim.id)) {
+			id_count[anim.id]=0;
+		}
+		else {
+			++id_count[anim.id];
+		}
+
+		animation_list.insert({
+			anim,
+			duration
+		});
+	}
+
+	//The duplicated ids are those that in id_count are larger than 0.
+	repeated_ids.clear();
+	for(const auto& pair : id_count) {
+		if(pair.second) {
+			repeated_ids.push_back(pair.first);
+		}
 	}
 }
 
@@ -242,6 +308,11 @@ void main::receive_message(
 
 void main::move_animation_up() {
 
+	if(animation_list.size() < 2) {
+
+		return;
+	}
+
 	const auto index=animation_list.get_current_index();
 	if(!index) {
 
@@ -259,6 +330,11 @@ void main::move_animation_up() {
 }
 
 void main::move_animation_down() {
+
+	if(animation_list.size() < 2) {
+
+		return;
+	}
 
 	const auto index=animation_list.get_current_index();
 	if(index==animation_list.size()-1) {
@@ -296,6 +372,26 @@ void main::erase_animation() {
 	update_hud();
 }
 
+void main::rename_animation() {
+
+	if(!animations.size()) {
+
+		return;
+	}
+
+	push_state(state_rename_animation);
+}
+
+void main::change_animation_id() {
+
+	if(!animations.size()) {
+
+		return;
+	}
+
+	push_state(state_change_animation_id);
+}
+
 void main::insert_animation() {
 
 	const auto index=animation_list.get_current_index();
@@ -307,3 +403,37 @@ void main::insert_animation() {
 
 	update_hud();
 }
+
+ldv::rect main::rect_for_animation_time(
+	float _current_time, 
+	const animation_data& _animation_data
+) {
+
+	const auto& frames=_animation_data.animation.frames;
+	const auto& table=visuals.get_table();
+
+	if(frames.size()==1) {
+
+		return table.get(frames.at(0).index).get_rect();
+	}
+	else {
+
+		float duration_seconds=_animation_data.duration / 1000.f;
+		float current_time=fmod(_current_time, duration_seconds);
+		float framesum{0.f};
+
+		for(const auto& frame : frames) {
+			
+			float frame_duration=frame.duration_ms / 1000.f;
+
+			if(framesum >= current_time && framesum+frame_duration > current_time) {
+
+				return table.get(frame.index).get_rect();
+			}
+			framesum+=frame_duration;
+		}
+	}
+
+	return table.get(frames.at(0).index).get_rect();
+}
+

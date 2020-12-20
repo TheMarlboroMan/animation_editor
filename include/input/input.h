@@ -17,6 +17,9 @@ load,
 lctrl,
 del,
 insert,
+rename,
+change_id,
+backspace,
 f1
 };
 

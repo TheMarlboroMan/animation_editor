@@ -37,8 +37,14 @@ class main:
 
 	bool                        intra_get_file_browser_allow_new() const {return intra_file_browser_allow_new;}
 	void                        intra_set_update_on_awake(bool _val) {intra_update_on_awake=_val;}
+	std::size_t                 intra_get_current_index() const {return animation_list.get_current_index();}
 
 	private:
+
+	struct animation_data {
+		animation_editor::animation     animation;
+		int                             duration;
+	};
 
 	void                        receive_message(tools::message_manager::notify_event_type);
 	void                        update_hud();
@@ -47,6 +53,9 @@ class main:
 	void                        move_animation_down();
 	void                        erase_animation();
 	void                        insert_animation();
+	void                        rename_animation();
+	void                        change_animation_id();
+	ldv::rect                   rect_for_animation_time(float, const animation_data&);
 
 	//references...
 	lm::logger&                         log;
@@ -59,13 +68,14 @@ class main:
 	//properties
 	ldv::rect                           display_rect;
 	ldtools::view_composer              layout;
-	tools::vertical_list<animation_editor::animation>   animation_list;
+	tools::vertical_list<animation_data> animation_list;
+	std::vector<std::size_t>            repeated_ids; //!<Vector with the index of repeated ids...
 
 	bool                                intra_file_browser_allow_new{false},
 	                                    intra_update_on_awake{true};
 
-	const int                           margin_top_list;
-	const int                           h_list_item;
+	const unsigned int                  margin_top_list;
+	const unsigned int                  h_list_item;
 
 };
 

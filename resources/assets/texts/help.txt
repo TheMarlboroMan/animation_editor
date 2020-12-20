@@ -2,7 +2,28 @@
 
 == ANIMATION LIST ==
 
-arrows : select animation
+Red animations are those with repeated ids.
+
+arrows : select current animation
+enter : access frame list
+insert : create animation
+delete : delete current animation
 pageup - pagedown : change animation order.
+s - save
+lctrl+x - save as
+l - load
+r - rename animation
+i - change animation id
 
+== FRAME LIST ==
 
+arrows : select current frame
+enter : access sprite selection
+insert : create frame
+delete : delete current frame
+pageup - pagedown : change frame order.
+
+== SPRITE LIST ==
+
+arrows : choose sprite
+enter : select sprite
