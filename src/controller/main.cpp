@@ -20,8 +20,8 @@ main::main(
 	animation_editor::animations& _animations,
 	const animation_editor::visuals& _visuals,
 	ldv::rect _display_rect,
-	int _margin,
-	int _height
+	unsigned int _margin,
+	unsigned int _height
 ):
 	log{_log},
 	ttf_manager{_tff_manager},
@@ -57,10 +57,21 @@ void main::awake(
 ) {
 	if(intra_update_on_awake) {
 
+		const auto index=animation_list.get_current_index();
+
 		update_hud();
 		update_list();
-		intra_update_on_awake=false;
+
+		if(intra_keep_index_on_awake) {
+
+			animation_list.set_index(index);
+		}
+
 	}
+
+	intra_file_browser_allow_new=false;
+	intra_update_on_awake=true;
+	intra_keep_index_on_awake=true;
 }
 
 void main::slumber(
@@ -125,7 +136,13 @@ void main::loop(
 	if(_input.is_input_down(input::rename)) {
 
 		rename_animation();
-		return;	
+		return;
+	}
+
+	if(_input.is_input_down(input::enter)) {
+
+		enter_animation_frames();
+		return;
 	}
 
 	if(_input.is_input_down(input::pageup)) {
@@ -217,7 +234,7 @@ void main::draw(
 		ldv::bitmap_representation bmp(
 			visuals.get_texture(),
 			{max_w, y, 32, 32},
-			rect_for_animation_time(ticker.get(), item.item)
+			visuals.rect_for_animation_time(ticker.get(), item.item.animation, item.item.duration)
 		);
 
 		bmp.draw(_screen);
@@ -370,6 +387,8 @@ void main::erase_animation() {
 	}
 
 	update_hud();
+
+	message_manager.add("animation deleted");
 }
 
 void main::rename_animation() {
@@ -392,6 +411,17 @@ void main::change_animation_id() {
 	push_state(state_change_animation_id);
 }
 
+void main::enter_animation_frames() {
+
+	if(!animations.size()) {
+
+		return;
+	}
+
+	push_state(state_animation);
+}
+
+
 void main::insert_animation() {
 
 	const auto index=animation_list.get_current_index();
@@ -402,38 +432,6 @@ void main::insert_animation() {
 	animation_list.set_index(index);
 
 	update_hud();
+
+	message_manager.add("emtpy animation created");
 }
-
-ldv::rect main::rect_for_animation_time(
-	float _current_time, 
-	const animation_data& _animation_data
-) {
-
-	const auto& frames=_animation_data.animation.frames;
-	const auto& table=visuals.get_table();
-
-	if(frames.size()==1) {
-
-		return table.get(frames.at(0).index).get_rect();
-	}
-	else {
-
-		float duration_seconds=_animation_data.duration / 1000.f;
-		float current_time=fmod(_current_time, duration_seconds);
-		float framesum{0.f};
-
-		for(const auto& frame : frames) {
-			
-			float frame_duration=frame.duration_ms / 1000.f;
-
-			if(framesum >= current_time && framesum+frame_duration > current_time) {
-
-				return table.get(frame.index).get_rect();
-			}
-			framesum+=frame_duration;
-		}
-	}
-
-	return table.get(frames.at(0).index).get_rect();
-}
-

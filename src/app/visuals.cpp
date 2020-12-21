@@ -18,3 +18,39 @@ void visuals::load_table(
 
 	table.load(_filepath);
 }
+
+ldv::rect visuals::rect_for_animation_time(
+	float _current_time,
+	const animation_editor::animation& _animation,
+	int _duration
+) const {
+
+	const auto& frames=_animation.frames;
+	const auto& anim_table=get_table();
+
+	if(frames.size()==1) {
+
+		return anim_table.get(frames.at(0).index).get_rect();
+	}
+	else {
+
+		float duration_seconds=_duration / 1000.f;
+		float current_time=fmod(_current_time, duration_seconds);
+		float framesum{0.f};
+
+		for(const auto& frame : frames) {
+
+			float frame_duration=frame.duration_ms / 1000.f;
+
+			if(framesum <= current_time && current_time < framesum+frame_duration) {
+
+				return anim_table.get(frame.index).get_rect();
+			}
+			framesum+=frame_duration;
+		}
+	}
+
+	//Stupid default that should never happen.
+	return anim_table.get(frames.at(0).index).get_rect();
+}
+

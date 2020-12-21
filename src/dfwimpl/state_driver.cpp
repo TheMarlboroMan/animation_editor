@@ -121,6 +121,8 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 		{input_description_from_config_token(config.token_from_path("input:rename")), input::rename},
 		{input_description_from_config_token(config.token_from_path("input:change_id")), input::change_id},
 		{input_description_from_config_token(config.token_from_path("input:backspace")), input::backspace},
+		{input_description_from_config_token(config.token_from_path("input:plus")), input::plus},
+		{input_description_from_config_token(config.token_from_path("input:minus")), input::minus},
 		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1}
 	};
 
@@ -182,19 +184,45 @@ void state_driver::register_controllers(
 		)
 	);
 	reg(
-		c_rename_animation, 
-		controller::t_states::state_rename_animation, 
+		c_rename_animation,
+		controller::t_states::state_rename_animation,
 		new controller::rename_animation(
 			log,
 			ttf_manager
 		)
 	);
 	reg(
-		c_change_animation_id, 
-		controller::t_states::state_change_animation_id, 
+		c_change_animation_id,
+		controller::t_states::state_change_animation_id,
 		new controller::change_animation_id(
 			log,
 			ttf_manager
+		)
+	);
+	reg(
+		c_animation,
+		controller::t_states::state_animation,
+		new controller::animation(
+			log,
+			ttf_manager,
+			message_manager,
+			ticker,
+			visuals,
+			_kernel.get_screen().get_rect(),
+			config.int_from_path("app:margin_top_list"),
+			config.int_from_path("app:h_list_item")
+		)
+	);
+	reg(
+		c_frame_selection,
+		controller::t_states::state_frame_selection,
+		new controller::frame_selection(
+			log,
+			ttf_manager,
+			visuals,
+			_kernel.get_screen().get_rect(),
+			config.int_from_path("app:margin_list_grid"),
+			config.int_from_path("app:size_list_grid")
 		)
 	);
 	//[new-controller-mark]
@@ -211,9 +239,30 @@ void state_driver::prepare_state(
 	controller::main * main=static_cast<controller::main *>(c_main.get());
 	controller::rename_animation * rename=static_cast<controller::rename_animation *>(c_rename_animation.get());
 	controller::change_animation_id * change_id=static_cast<controller::change_animation_id *>(c_change_animation_id.get());
+	controller::animation * animation_controller=static_cast<controller::animation *>(c_animation.get());
+	controller::frame_selection * frame_selection=static_cast<controller::frame_selection *>(c_frame_selection.get());
 
 	using namespace controller;
 	switch(_next) {
+
+		case t_states::state_animation:
+
+			switch(_current) {
+
+				case t_states::state_main:
+						animation_controller->intra_set_animation(
+						animations.at(main->intra_get_current_index())
+					);
+				break;
+				case t_states::state_frame_selection:
+
+					if(frame_selection->intra_get_success()) {
+
+						animation_controller->intra_set_frame_index(frame_selection->intra_get_frame_id());
+					}
+				break;
+			}
+		break;
 
 		case t_states::state_rename_animation:
 
@@ -261,13 +310,16 @@ void state_driver::prepare_state(
 
 						if(load(file_browser->intra_get_result())) {
 							main->intra_set_update_on_awake(true);
+							main->intra_set_keep_index_on_awake(false);
 						}
 					}
 				break;
 
+				case t_states::state_animation:
 				case t_states::state_rename_animation:
 				case t_states::state_change_animation_id:
 					main->intra_set_update_on_awake(true);
+					main->intra_set_keep_index_on_awake(true);
 				break;
 
 				case t_states::state_main:

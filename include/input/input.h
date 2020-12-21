@@ -20,6 +20,8 @@ insert,
 rename,
 change_id,
 backspace,
+plus,
+minus,
 f1
 };
 

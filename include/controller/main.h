@@ -27,8 +27,8 @@ class main:
 	                                animation_editor::animations&,
 	                                const animation_editor::visuals&,
 	                                ldv::rect,
-	                                int,
-	                                int);
+	                                unsigned int,
+	                                unsigned int);
 	virtual void                loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void                draw(ldv::screen&, int);
 	virtual void                awake(dfw::input& /*input*/);
@@ -37,6 +37,7 @@ class main:
 
 	bool                        intra_get_file_browser_allow_new() const {return intra_file_browser_allow_new;}
 	void                        intra_set_update_on_awake(bool _val) {intra_update_on_awake=_val;}
+	void                        intra_set_keep_index_on_awake(bool _val) {intra_keep_index_on_awake=_val;}
 	std::size_t                 intra_get_current_index() const {return animation_list.get_current_index();}
 
 	private:
@@ -55,7 +56,7 @@ class main:
 	void                        insert_animation();
 	void                        rename_animation();
 	void                        change_animation_id();
-	ldv::rect                   rect_for_animation_time(float, const animation_data&);
+	void                        enter_animation_frames();
 
 	//references...
 	lm::logger&                         log;
@@ -72,7 +73,8 @@ class main:
 	std::vector<std::size_t>            repeated_ids; //!<Vector with the index of repeated ids...
 
 	bool                                intra_file_browser_allow_new{false},
-	                                    intra_update_on_awake{true};
+	                                    intra_update_on_awake{true},
+	                                    intra_keep_index_on_awake{true};
 
 	const unsigned int                  margin_top_list;
 	const unsigned int                  h_list_item;

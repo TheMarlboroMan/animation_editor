@@ -17,6 +17,8 @@
 #include "../../include/controller/file_browser.h"
 #include "../../include/controller/rename_animation.h"
 #include "../../include/controller/change_animation_id.h"
+#include "../../include/controller/animation.h"
+#include "../../include/controller/frame_selection.h"
 //[new-controller-header-mark]
 
 //Specific app_config
@@ -68,6 +70,8 @@ class state_driver:
 	ptr_controller					c_file_browser;
 	ptr_controller					c_rename_animation;
 	ptr_controller					c_change_animation_id;
+	ptr_controller					c_animation;
+	ptr_controller					c_frame_selection;
 	//[new-controller-property-mark]
 };
 

@@ -22,6 +22,8 @@ enter : access sprite selection
 insert : create frame
 delete : delete current frame
 pageup - pagedown : change frame order.
++ : make frame longer (hold ctrl for fine control)
+- : make frame shorter (hold ctrl for fine control)
 
 == SPRITE LIST ==
 
