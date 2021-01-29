@@ -30,7 +30,7 @@ ldv::rect visuals::rect_for_animation_time(
 
 	if(frames.size()==1) {
 
-		return anim_table.get(frames.at(0).index).get_rect();
+		return anim_table.get(frames.at(0).index).box;
 	}
 	else {
 
@@ -44,13 +44,13 @@ ldv::rect visuals::rect_for_animation_time(
 
 			if(framesum <= current_time && current_time < framesum+frame_duration) {
 
-				return anim_table.get(frame.index).get_rect();
+				return anim_table.get(frame.index).box;
 			}
 			framesum+=frame_duration;
 		}
 	}
 
 	//Stupid default that should never happen.
-	return anim_table.get(frames.at(0).index).get_rect();
+	return anim_table.get(frames.at(0).index).box;
 }
 

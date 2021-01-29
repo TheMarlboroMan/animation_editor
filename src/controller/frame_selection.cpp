@@ -117,7 +117,7 @@ void frame_selection::draw(
 		ldv::bitmap_representation bmp(
 			visuals.get_texture(),
 			{item.x, item.y, frame_list.get_item_w(), frame_list.get_item_h()},
-			item.item.second.get_rect()
+			item.item.second.box
 		);
 
 		bmp.set_blend(ldv::representation::blends::alpha);

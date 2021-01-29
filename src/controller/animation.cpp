@@ -193,7 +193,7 @@ void animation::draw(
 		ldv::bitmap_representation bmp(
 			visuals.get_texture(),
 			{max_w, y, 32, 32},
-			visuals.get_table().get(item.item.index).get_rect()
+			visuals.get_table().get(item.item.index).box
 		);
 
 		bmp.draw(_screen);
