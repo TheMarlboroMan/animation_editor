@@ -15,6 +15,7 @@ using namespace controller;
 file_browser::file_browser(
 	lm::logger& plog,
 	ldtools::ttf_manager& _ttfman,
+	const env::env_interface& _env,
 	int _window_height
 ):
 	log(plog),
@@ -29,7 +30,7 @@ file_browser::file_browser(
 
 	auto root=tools::parse_json_string(
 		tools::dump_file(
-			"resources/layouts.json"
+			_env.build_data_path("layouts.json")
 		)
 	);
 

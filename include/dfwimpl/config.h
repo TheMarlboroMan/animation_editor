@@ -1,7 +1,10 @@
 #pragma once
 
+#include "../env/env.h"
+
 #include <dfw/base_config.h>
 #include <dfw/input.h>
+
 
 #include <iostream>
 
@@ -14,7 +17,7 @@ class config:
 
 	public:
 
-	config();
+	config(const env::env_interface&);
 
 	//Fullfillment of the kernel interface.
 
@@ -34,7 +37,9 @@ class config:
 
 	private:
 
-	std::string get_file_path() const {return "resources/config.json";}
+	std::string get_file_path(const env::env_interface& _env) const {
+		return _env.build_data_path("config.json");
+	}
 };
 
 dfw::input_description          input_description_from_config_token(const rapidjson::Value&);

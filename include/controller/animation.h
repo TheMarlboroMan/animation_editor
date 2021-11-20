@@ -4,6 +4,7 @@
 #include "states.h"
 #include "app/visuals.h"
 #include "app/animation.h"
+#include "env/env.h"
 #include "tools/ticker.h"
 #include "tools/message_manager.h"
 
@@ -26,6 +27,7 @@ class animation:
 	                                tools::message_manager&,
 	                                const tools::ticker&,
 	                                const animation_editor::visuals&,
+	                                const env::env_interface&,
 	                                ldv::rect,
 	                                unsigned int,
 	                                unsigned int
