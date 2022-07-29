@@ -18,6 +18,7 @@ animation::animation(
 	tools::message_manager& _message_manager,
 	const tools::ticker& _ticker,
 	const animation_editor::visuals& _visuals,
+	const env::env_interface& _env,
 	ldv::rect _display,
 	unsigned int _margin,
 	unsigned int _height
@@ -43,7 +44,7 @@ animation::animation(
 
 	auto root=tools::parse_json_string(
 		tools::dump_file(
-			"resources/layouts.json"
+			_env.build_data_path("layouts.json")
 		)
 	);
 

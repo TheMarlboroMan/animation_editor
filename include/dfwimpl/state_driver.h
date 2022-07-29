@@ -3,6 +3,7 @@
 #include "config.h"
 #include "app/animation.h"
 #include "app/visuals.h"
+#include "env/env.h"
 #include "tools/message_manager.h"
 #include "tools/ticker.h"
 
@@ -30,7 +31,11 @@ class state_driver:
 	public dfw::state_driver_interface {
 
 	public:
-	                                state_driver(dfw::kernel& kernel, dfwimpl::config& config);
+	                                state_driver(
+		dfw::kernel& kernel, 
+		dfwimpl::config& config,
+		const env::env_interface&
+	);
 
 	virtual void                    common_pre_loop_input(dfw::input& input, float delta);
 	virtual void                    common_pre_loop_step(float delta);
@@ -55,6 +60,7 @@ class state_driver:
 	//references
 	dfwimpl::config&                config;
 	lm::logger&                     log;
+	const env::env_interface&      env;
 
 	//properties
 	ldtools::ttf_manager            ttf_manager;

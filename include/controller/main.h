@@ -6,6 +6,7 @@
 #include "tools/message_manager.h"
 #include "app/animation.h"
 #include "app/visuals.h"
+#include "env/env.h"
 
 #include <dfw/controller_interface.h>
 #include <lm/logger.h>
@@ -26,6 +27,7 @@ class main:
 	                                const tools::ticker&,
 	                                animation_editor::animations&,
 	                                const animation_editor::visuals&,
+	                                const env::env_interface&,
 	                                ldv::rect,
 	                                unsigned int,
 	                                unsigned int);

@@ -9,6 +9,7 @@ using namespace controller;
 help::help(
 	lm::logger& _log,
 	ldtools::ttf_manager& _ttf_manager,
+	const env::env_interface& _env, 
 	unsigned int _w,
 	unsigned int _h
 )
@@ -24,7 +25,9 @@ help::help(
 	} {
 
 	help_rep.set_max_width(_w);
-	help_rep.set_text(tools::dump_file("resources/assets/texts/help.txt"));
+	help_rep.set_text(tools::dump_file(
+		_env.build_data_path("assets/texts/help.txt")
+	));
 	help_rep.go_to({0,0});
 	camera.set_limits(help_rep.get_view_position());
 

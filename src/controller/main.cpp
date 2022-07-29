@@ -1,6 +1,7 @@
 #include "controller/main.h"
 #include "input/input.h"
 #include "app/definitions.h"
+#include "env/env.h"
 
 #include <tools/json.h>
 #include <tools/file_utils.h>
@@ -19,6 +20,7 @@ main::main(
 	const tools::ticker& _ticker,
 	animation_editor::animations& _animations,
 	const animation_editor::visuals& _visuals,
+	const env::env_interface& _env,
 	ldv::rect _display_rect,
 	unsigned int _margin,
 	unsigned int _height
@@ -45,7 +47,7 @@ main::main(
 
 	auto root=tools::parse_json_string(
 		tools::dump_file(
-			"resources/layouts.json"
+		_env.build_data_path("layouts.json")
 		)
 	);
 

@@ -1,5 +1,13 @@
 = HELP =
 
+== COMMAND LINE INTERFACE ==
+
+-i specifies spritesheet image [compulsory]
+-s specifies spritesheet table file [compusory]
+-f specifies animation file
+-v shows version and exits
+-h shows this help and exits
+
 == ANIMATION LIST ==
 
 Red animations are those with repeated ids.

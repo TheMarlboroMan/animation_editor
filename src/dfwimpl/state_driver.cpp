@@ -13,10 +13,15 @@
 
 using namespace dfwimpl;
 
-state_driver::state_driver(dfw::kernel& kernel, dfwimpl::config& c)
+state_driver::state_driver(
+	dfw::kernel& kernel, 
+	dfwimpl::config& c,
+	const env::env_interface& _env
+) 
 	:state_driver_interface(controller::t_states::state_main),
 	config(c),
 	log(kernel.get_log()),
+	env{_env},
 	message_manager(30) {
 
 	lm::log(log).info()<<"setting state check function..."<<std::endl;
@@ -85,7 +90,13 @@ void state_driver::prepare_video(dfw::kernel& kernel) {
 	auto& screen=kernel.get_screen();
 	screen.set_fullscreen(config.bool_from_path("video:fullscreen"));
 
-	ttf_manager.insert(animation_editor::definitions::main_font_name, animation_editor::definitions::main_font_size, "resources/assets/fonts/BebasNeue-Regular.ttf");
+	ttf_manager.insert(
+		animation_editor::definitions::main_font_name, 
+		animation_editor::definitions::main_font_size, 
+		env.build_data_path(
+			"assets/fonts/BebasNeue-Regular.ttf"
+		)
+	);
 }
 
 void state_driver::prepare_audio(dfw::kernel& kernel) {
@@ -159,6 +170,7 @@ void state_driver::register_controllers(
 			ticker,
 			animations,
 			visuals,
+			env,
 			_kernel.get_screen().get_rect(),
 			config.int_from_path("app:margin_top_list"),
 			config.int_from_path("app:h_list_item")
@@ -170,6 +182,7 @@ void state_driver::register_controllers(
 		new controller::help(
 			log,
 			ttf_manager,
+			env,
 			_kernel.get_screen().get_w(),
 			_kernel.get_screen().get_h()
 		)
@@ -180,6 +193,7 @@ void state_driver::register_controllers(
 		new controller::file_browser(
 			log,
 			ttf_manager,
+			env,
 			_kernel.get_screen().get_w()
 		)
 	);
@@ -208,6 +222,7 @@ void state_driver::register_controllers(
 			message_manager,
 			ticker,
 			visuals,
+			env,
 			_kernel.get_screen().get_rect(),
 			config.int_from_path("app:margin_top_list"),
 			config.int_from_path("app:h_list_item")
