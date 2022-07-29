@@ -6,7 +6,7 @@
 #include <tools/file_utils.h>
 #include <tools/string_utils.h>
 #include <ldv/ttf_representation.h>
-#include <lm/sentry.h>
+#include <lm/log.h>
 
 #include <algorithm>
 
