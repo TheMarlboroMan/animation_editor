@@ -1,2 +1,5 @@
 build
 GETTING_STARTED.txt
+.git
+AppDir
+*AppImage

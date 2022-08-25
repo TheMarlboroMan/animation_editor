@@ -1,0 +1,8 @@
+[Desktop Entry]
+Categories=Game;
+Icon=animation_editor
+Name=Animation editor
+Type=Application
+Exec=animation_editor
+
+Name[en_US]=animation_editor.desktop

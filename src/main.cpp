@@ -12,6 +12,9 @@
 
 #include <ldt/sdl_tools.h>
 #include <ldt/log.h>
+#include <ldt/lib.h>
+#include <ldtools/lib.h>
+#include <dfw/lib.h>
 
 #include <memory>
 #include <stdexcept>
@@ -33,7 +36,7 @@ int main(int argc, char ** argv)
 	if(carg.exists("-h")) {
 
 		std::cout<<"animation_editor "
-			<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION
+			<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION<<"-"<<BUILD_VERSION
 			<<" built on "<<__DATE__<<" "<<__TIME__
 			<<std::endl<<std::endl
 			<<tools::dump_file(env->build_data_path("assets/texts/help.txt"))<<std::endl;
@@ -43,12 +46,16 @@ int main(int argc, char ** argv)
 	if(carg.exists("-v")) {
 
 		std::cout<<"animation_editor "
-			<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION
-			<<" built on "<<__DATE__<<" "<<__TIME__<<std::endl;
+			<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION<<"-"<<BUILD_VERSION
+			<<" built on "<<__DATE__<<" "<<__TIME__<<std::endl
+			<<"libdansdl2 version: "<<ldt::get_lib_version()<<std::endl
+			<<"ldtools version: "<<ldtools::get_lib_version()<<std::endl
+			<<"dfw version: "<<dfw::get_lib_version()<<std::endl;
 		return 0;
 	}
 
 	//Init application log.
+	//TODO: Not really, user path is better.
 	const std::string log_path{env->build_log_path("app.log")};
 	lm::file_logger log_app(log_path.c_str());
 	lm::log(log_app).info()<<"starting main process..."<<std::endl;
@@ -104,7 +111,16 @@ std::unique_ptr<env::env_interface> make_env() {
 	auto last_slash=executable_path.find_last_of("/");
 	executable_dir=executable_path.substr(0, last_slash)+"/";
 
-	return std::unique_ptr<env::env_interface>(
+	//TODO: ifdef as regular do nothing, if appimage ad ../share to executable dir.
+	//TODO: remember to define /.animation_editor in the ENV class.
+
+	//TODO: add getenv("HOME") here and to the dir_env class.
+	//TODO: and likely do man getenv to see where it is included.
+	auto result=std::unique_ptr<env::env_interface>(
 		new env::dir_env(executable_dir)
 	);
+
+	//TODO: create home dir if it does not exist.
+	//TODO: dump config file if it does not exist.
+	return result;
 }

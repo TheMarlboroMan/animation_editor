@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>net.caballorenoir.animation_editor</id>
+  
+  <name>Animation Editor</name>
+  <summary>Small application to generate animation from sprite sheets</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>Beerware</project_license>
+  
+  <description>
+    <p>
+	Application to generate animations from sprite sheets. The input must come from the sprite table application. The output is a simple, plain text format.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">animation_editor.desktop</launchable>
+  <screenshots>
+	<!--
+    <screenshot type="default">
+      <image>http://caballorenoir.net/hosted/games/images/pigsncows-title.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://caballorenoir.net/hosted/games/images/pigsncows-gameplay1.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://caballorenoir.net/hosted/games/images/pigsncows-gameplay2.png</image>
+    </screenshot>
+  </screenshots>
+	-->
+</component>
