@@ -20,6 +20,7 @@
 #include <stdexcept>
 
 #include <unistd.h>
+#include <cstdlib>
 
 std::unique_ptr<env::env_interface> make_env();
 
@@ -55,8 +56,7 @@ int main(int argc, char ** argv)
 	}
 
 	//Init application log.
-	//TODO: Not really, user path is better.
-	const std::string log_path{env->build_log_path("app.log")};
+	const std::string log_path{env->build_user_path("app.log")};
 	lm::file_logger log_app(log_path.c_str());
 	lm::log(log_app).info()<<"starting main process..."<<std::endl;
 
@@ -111,16 +111,37 @@ std::unique_ptr<env::env_interface> make_env() {
 	auto last_slash=executable_path.find_last_of("/");
 	executable_dir=executable_path.substr(0, last_slash)+"/";
 
-	//TODO: ifdef as regular do nothing, if appimage ad ../share to executable dir.
-	//TODO: remember to define /.animation_editor in the ENV class.
+#ifdef AS_REGULAR
 
-	//TODO: add getenv("HOME") here and to the dir_env class.
-	//TODO: and likely do man getenv to see where it is included.
 	auto result=std::unique_ptr<env::env_interface>(
-		new env::dir_env(executable_dir)
+		new env::dir_env(executable_dir, getenv("HOME"))
 	);
 
-	//TODO: create home dir if it does not exist.
-	//TODO: dump config file if it does not exist.
+#else
+	#ifdef AS_APPIMAGE
+
+	auto result=std::unique_ptr<env::env_interface>(
+		new env::appimage_env(executable_dir, getenv("HOME"))
+	);
+
+	#else
+		#error AS_REGULAR or AS_APPIMAGE must be defined
+	#endif
+#endif
+	if(!tools::filesystem::exists(result->build_user_path(""))) {
+
+		std::cout<<"will create the .animation_editor under user home"<<std::endl;
+		tools::filesystem::create_directory(result->build_user_path(""));
+	}
+
+	if(!tools::filesystem::exists(result->build_user_path("config.json"))) {
+
+		std::cout<<"will copy config.json file"<<std::endl;
+		tools::filesystem::copy(
+			result->build_data_path("config.json"),
+			result->build_user_path("config.json")
+		);
+	}
+
 	return result;
 }

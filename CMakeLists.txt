@@ -11,7 +11,7 @@ option(WITH_LEXICAL_NORMALIZE "just see the tile_editor or sprite table apps for
 #application version and build type
 set(MAJOR_VERSION 1)
 set(MINOR_VERSION 1)
-set(PATCH_VERSION 0)
+set(PATCH_VERSION 1)
 
 if(${BUILD_REGULAR})
 
@@ -29,7 +29,7 @@ if(${BUILD_DEBUG})
 	set(BUILD_VERSION "${BUILD_VERSION}.debug")
 endif()
 
-if(${CMAKE_VERSION} VERSION_LESS "3.22.0") 
+if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 
 	add_definitions(-DMAJOR_VERSION=${MAJOR_VERSION})
 	add_definitions(-DMINOR_VERSION=${MINOR_VERSION})
@@ -52,7 +52,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(${BUILD_DEBUG})
 	set(CMAKE_BUILD_TYPE Debug)
-	if(${CMAKE_VERSION} VERSION_LESS "3.22.0") 
+	if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 		add_definitions(-DLIBDANSDL2_DEBUG)
 	else()
 		add_compile_definitions(LIBDANSDL2_DEBUG)
@@ -63,14 +63,14 @@ endif()
 
 if(${BUILD_REGULAR})
 
-	if(${CMAKE_VERSION} VERSION_LESS "3.22.0") 
+	if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 		add_definitions(-DAS_REGULAR)
 	else()
 		add_compile_definitions(AS_REGULAR)
 	endif()
 elseif(${BUILD_APPIMAGE})
-	
-	if(${CMAKE_VERSION} VERSION_LESS "3.22.0") 
+
+	if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 		add_definitions(-DAS_APPIMAGE)
 	else()
 		add_compile_definitions(AS_APPIMAGE)
@@ -79,7 +79,7 @@ endif()
 
 if(${WITH_LEXICAL_NORMALIZE})
 
-	if(${CMAKE_VERSION} VERSION_LESS "3.22.0") 
+	if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 		add_definitions(-DWITH_LEXICAL_NORMALIZE)
 	else()
 		add_compile_definitions(WITH_LEXICAL_NORMALIZE)
@@ -134,7 +134,6 @@ endif()
 add_executable(animation_editor src/main.cpp)
 set_target_properties(animation_editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY build)
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/resources)
-add_custom_command(TARGET animation_editor POST_BUILD COMMAND mkdir -p build/logs)
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../resources/* ./build/resources)
 add_custom_command(TARGET animation_editor POST_BUILD COMMAND cp -r ../example ./build)
 target_link_libraries(animation_editor applib dfw tools ldtools dansdl2 lm SDL2 SDL2_ttf SDL2_mixer SDL2_image GL stdc++fs)

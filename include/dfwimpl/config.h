@@ -38,7 +38,7 @@ class config:
 	private:
 
 	std::string get_file_path(const env::env_interface& _env) const {
-		return _env.build_data_path("config.json");
+		return _env.build_user_path("config.json");
 	}
 };
 
