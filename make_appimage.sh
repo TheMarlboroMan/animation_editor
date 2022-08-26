@@ -9,7 +9,13 @@ fi;
 #export SIGN=1
 #export SIGN_KEY=0xLAST8CHARSOFGPGKEYID
 
-export VERSION="1.1.1"
+MAJOR_VERSION=`grep "set(MAJOR_VERSION" CMakeLists.txt | awk '{print $2}' | tr -d ')'`
+MINOR_VERSION=`grep "set(MINOR_VERSION" CMakeLists.txt | awk '{print $2}' | tr -d ')'`
+PATCH_VERSION=`grep "set(PATCH_VERSION" CMakeLists.txt | awk '{print $2}' | tr -d ')'`
+
+export VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
+echo "will build $VERSION"
+exit
 rm -rf AppDir
 $2 --appdir AppDir
 cp -r resources AppDir/usr/share
