@@ -15,7 +15,6 @@ PATCH_VERSION=`grep "set(PATCH_VERSION" CMakeLists.txt | awk '{print $2}' | tr -
 
 export VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
 echo "will build $VERSION"
-exit
 rm -rf AppDir
 $2 --appdir AppDir
 cp -r resources AppDir/usr/share
