@@ -14,10 +14,10 @@
 using namespace dfwimpl;
 
 state_driver::state_driver(
-	dfw::kernel& kernel, 
+	dfw::kernel& kernel,
 	dfwimpl::config& c,
 	const env::env_interface& _env
-) 
+)
 	:state_driver_interface(controller::t_states::state_main),
 	config(c),
 	log(kernel.get_log()),
@@ -77,12 +77,15 @@ void state_driver::prepare_video(dfw::kernel& kernel) {
 		lm::log(log).info()<<"window size specified by command line as "<<window_size_str<<" ["<<w<<"x"<<h<<"]"<<std::endl;
 	}
 
+	std::stringstream ss;
+	ss<<"Animation Editor v"<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION<<"-"<<BUILD_VERSION;
+
 	kernel.init_video_system({
 		w,
 		h,
 		w,
 		h,
-		"Animation editor",
+		ss.str(),
 		false,
 		config.get_screen_vsync()
 	});
@@ -91,8 +94,8 @@ void state_driver::prepare_video(dfw::kernel& kernel) {
 	screen.set_fullscreen(config.bool_from_path("video:fullscreen"));
 
 	ttf_manager.insert(
-		animation_editor::definitions::main_font_name, 
-		animation_editor::definitions::main_font_size, 
+		animation_editor::definitions::main_font_name,
+		animation_editor::definitions::main_font_size,
 		env.build_data_path(
 			"assets/fonts/BebasNeue-Regular.ttf"
 		)

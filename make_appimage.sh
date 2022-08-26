@@ -9,9 +9,10 @@ fi;
 #export SIGN=1
 #export SIGN_KEY=0xLAST8CHARSOFGPGKEYID
 
+export VERSION="1.1.1"
 rm -rf AppDir
 $2 --appdir AppDir
-cp -r resources/data AppDir/usr/share
+cp -r resources AppDir/usr/share
 mkdir -p AppDir/usr/share/metainfo
 cp linuxdeploy/*.xml AppDir/usr/share/metainfo/
 $2 --executable $1 --appdir AppDir -i ./linuxdeploy/animation_editor.png -d ./linuxdeploy/animation_editor.desktop --output appimage

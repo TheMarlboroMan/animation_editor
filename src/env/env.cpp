@@ -24,7 +24,7 @@ appimage_env::appimage_env(
 	const std::string& _path,
 	const std::string& _homedir
 ):
-	exec_dir{std::string{"../share"}+_path},
+	exec_dir{_path+std::string{"../share/"}},
 	user_dir{_homedir+"/.animation_editor/"}
 {
 
@@ -33,7 +33,7 @@ appimage_env::appimage_env(
 const std::string appimage_env::build_data_path(const std::string& _file) const {
 
 
-	return exec_dir+std::string{"data/"}+_file;
+	return exec_dir+std::string{"resources/"}+_file;
 }
 
 const std::string appimage_env::build_user_path(const std::string& _file) const {

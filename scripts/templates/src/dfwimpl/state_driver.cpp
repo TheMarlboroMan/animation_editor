@@ -6,6 +6,8 @@
 #include <tools/string_utils.h>
 
 #include <algorithm>
+#include <string>
+#include <sstream>
 
 using namespace dfwimpl;
 
@@ -42,12 +44,15 @@ state_driver::state_driver(dfw::kernel& kernel, dfwimpl::config& c)
 
 void state_driver::prepare_video(dfw::kernel& kernel) {
 
+	std::stringstream ss;
+	ss<<config.string_from_path("video:window_title")<<" v"<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION<<"-"<<BUILD_VERSION;
+
 	kernel.init_video_system({
 		config.int_from_path("video:window_w_px"),
 		config.int_from_path("video:window_h_px"),
 		config.int_from_path("video:window_w_logical"),
 		config.int_from_path("video:window_h_logical"),
-		config.string_from_path("video:window_title"),
+		ss.str(),
 		config.bool_from_path("video:window_show_cursor"),
 		config.get_screen_vsync()
 	});
