@@ -55,6 +55,11 @@ state_driver::state_driver(
 
 }
 
+void state_driver::init(dfw::kernel&) {
+
+}
+
+
 void state_driver::prepare_video(dfw::kernel& kernel) {
 
 	const auto argman=kernel.get_arg_manager();
