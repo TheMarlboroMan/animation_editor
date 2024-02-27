@@ -22,7 +22,8 @@ change_id,
 backspace,
 plus,
 minus,
-f1
+f1,
+flip
 };
 
 }

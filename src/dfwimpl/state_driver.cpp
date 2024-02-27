@@ -142,7 +142,8 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 		{input_description_from_config_token(config.token_from_path("input:backspace")), input::backspace},
 		{input_description_from_config_token(config.token_from_path("input:plus")), input::plus},
 		{input_description_from_config_token(config.token_from_path("input:minus")), input::minus},
-		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1}
+		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1},
+		{input_description_from_config_token(config.token_from_path("input:flip")), input::flip}
 	};
 
 	kernel.init_input_system(pairs);

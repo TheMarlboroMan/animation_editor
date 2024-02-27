@@ -11,7 +11,7 @@ option(WITH_LEXICAL_NORMALIZE "just see the tile_editor or sprite table apps for
 #application version and build type
 set(MAJOR_VERSION 1)
 set(MINOR_VERSION 1)
-set(PATCH_VERSION 1)
+set(PATCH_VERSION 2)
 
 if(${BUILD_REGULAR})
 

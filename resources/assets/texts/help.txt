@@ -32,6 +32,7 @@ delete : delete current frame
 pageup - pagedown : change frame order.
 + : make frame longer (hold ctrl for fine control)
 - : make frame shorter (hold ctrl for fine control)
+f - flip the frame (hold ctrl for vertical flip)
 
 == SPRITE LIST ==
 

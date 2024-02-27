@@ -38,7 +38,11 @@ std::string animation_saver::to_string(
 		ss<<"*"<<anim.name<<std::endl<<"!"<<anim.id<<std::endl;
 		for(const auto& fr : anim.frames) {
 
-			ss<<fr.duration_ms<<"\t"<<fr.index<<std::endl;
+			int flipped=0;
+			if(fr.flipped_horizontal) flipped+=1;
+			if(fr.flipped_vertical) flipped+=2;
+
+			ss<<fr.duration_ms<<"\t"<<fr.index<<"\t"<<flipped<<std::endl;
 		}
 	}
 

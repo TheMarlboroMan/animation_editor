@@ -15,6 +15,7 @@ class visuals {
 	ldv::texture&                   get_texture() const {return *texture;}
 	const ldtools::sprite_table&    get_table() const {return table;}
 	ldv::rect                       rect_for_animation_time(float _current_time, const animation_editor::animation& _animation, int _duration) const;
+	int                             flip_flags_for_animation_time(float _current_time, const animation_editor::animation& _animation, int _duration) const;
 
 	void                            load_texture(const std::string&);
 	void                            load_table(const std::string&);

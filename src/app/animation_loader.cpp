@@ -84,6 +84,7 @@ animations animation_loader::from_string(
 				}
 
 				int duration_ms{0};
+				int flipped{0};
 				std::size_t index{0};
 
 				ss>>duration_ms>>index;
@@ -92,7 +93,16 @@ animations animation_loader::from_string(
 					throw std::runtime_error(std::string{"invalid animation contents, bad data, current animation: "}+anim.name);
 				}
 
-				anim.frames.push_back({index, duration_ms});
+				ss>>flipped;
+				if(ss.fail()) {
+
+					//nothing, this is the old format...
+				}
+
+				bool flipped_horizontal=flipped & 1;
+				bool flipped_vertical=flipped & 2;
+
+				anim.frames.push_back({index, duration_ms, flipped_horizontal, flipped_vertical});
 			}
 			break;
 		}

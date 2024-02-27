@@ -53,6 +53,7 @@ class animation:
 		void                        enter_animation_frames();
 		void                        make_frame_longer(bool);
 		void                        make_frame_shorter(bool);
+		void                        flip_frame(bool);
 
 		//references...
 		lm::logger&                         log;

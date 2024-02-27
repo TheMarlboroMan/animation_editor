@@ -220,7 +220,7 @@ void main::draw(
 			""
 		);
 
-		const int max_w{ (display_rect.w / 4) * 3};
+		const int max_w{ ((int)display_rect.w / 4) * 3};
 		int y=item.y+margin_top_list;
 
 		txt.set_max_width(max_w);
@@ -232,12 +232,18 @@ void main::draw(
 
 			continue;
 		}
+
 		//Now for the animation...
 		ldv::bitmap_representation bmp(
 			visuals.get_texture(),
 			{max_w, y, 32, 32},
 			visuals.rect_for_animation_time(ticker.get(), item.item.animation, item.item.duration)
 		);
+
+		int flipped_mask=visuals.flip_flags_for_animation_time(ticker.get(), item.item.animation, item.item.duration);
+
+		bmp.set_invert_horizontal(flipped_mask & 1);
+		bmp.set_invert_vertical(flipped_mask & 2);
 
 		bmp.draw(_screen);
 	}

@@ -137,8 +137,12 @@ void animation::loop(
 		update_hud();
 		return;
 	}
-
+	
 	bool lctrl=_input.is_input_pressed(input::lctrl);
+	if(_input.is_input_down(input::flip)) {
+
+		flip_frame(lctrl);
+	}
 
 	if(_input.is_input_down(input::plus)) {
 
@@ -150,6 +154,7 @@ void animation::loop(
 		make_frame_shorter(lctrl);
 		return;
 	}
+
 }
 
 void animation::draw(
@@ -166,7 +171,7 @@ void animation::draw(
 		return;
 	}
 
-	const int max_w{ (display_rect.w / 4) * 3};
+	const int max_w{ ((int)display_rect.w / 4) * 3};
 
 	for(const auto& item : frame_list.get_page()) {
 
@@ -197,6 +202,9 @@ void animation::draw(
 			visuals.get_table().get(item.item.index).box
 		);
 
+		bmp.set_invert_horizontal(item.item.flipped_horizontal);
+		bmp.set_invert_vertical(item.item.flipped_vertical);
+
 		bmp.draw(_screen);
 	}
 
@@ -207,6 +215,10 @@ void animation::draw(
 		visuals.rect_for_animation_time(ticker.get(), *current_animation, duration)
 	);
 
+	int flipped_mask=visuals.flip_flags_for_animation_time(ticker.get(), *current_animation, duration);
+
+	bmp.set_invert_horizontal(flipped_mask & 1);
+	bmp.set_invert_vertical(flipped_mask & 2);
 	bmp.draw(_screen);
 }
 
@@ -397,6 +409,32 @@ void animation::make_frame_shorter(
 	if(frame.duration_ms < 1) {
 
 		frame.duration_ms=1;
+	}
+
+	update_list();
+	frame_list.set_index(index);
+	update_hud();
+}
+
+void animation::flip_frame(
+	bool _vertical
+) {
+
+	if(!(current_animation->frames.size())) {
+
+		return;
+	}
+
+	const auto index=frame_list.get_current_index();
+	auto& frame=current_animation->frames.at(index);
+
+	if(_vertical) {
+
+		frame.flipped_vertical=!frame.flipped_vertical;
+	}
+	else {
+
+		frame.flipped_horizontal=!frame.flipped_horizontal;
 	}
 
 	update_list();
