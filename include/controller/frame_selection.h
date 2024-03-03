@@ -47,6 +47,8 @@ class frame_selection:
 	ldv::rect                                   display_rect;
 	tools::grid_list<ldtools::sprite_table::container::value_type> frame_list;
 	bool                                        intra_success{false};
+	int                                         last_page{0};
+	int                                         last_index{0};
 };
 
 }

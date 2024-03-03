@@ -20,7 +20,7 @@ frame_selection::frame_selection(
 	ttf_manager{_ttf_manager},
 	visuals{_visuals},
 	display_rect{_display},
-	frame_list(_display.w, _display.w, _size, _size)
+	frame_list(_display.w, _display.h, _size, _size)
 {
 
 	frame_list.set_margin_w(_margin)
@@ -38,6 +38,13 @@ void frame_selection::awake(
 	}
 
 	intra_success=false;
+	frame_list.set_index(last_index);
+//	while(last_page) {
+
+//		frame_list.next_page();
+//		--last_page;
+//	}
+
 
 }
 
@@ -57,6 +64,8 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 	if(_input.is_input_down(input::enter)) {
 
 		intra_success=true;
+		last_page=frame_list.get_current_page();
+		last_index=frame_list.get().first;
 		pop_state();
 		return;
 	}

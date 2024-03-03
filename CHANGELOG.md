@@ -14,6 +14,10 @@ Changes will be documented under Added, Changed, Deprecated, Removed, Fixed or S
 - The animation preview is a static 32x32... could be adjusted.
 - Preview controller with the animation at its real size.
 
+## [v1.1.3]: 03-03-2024
+### Changed
+- Last frame is kept in frame selection page when inserting a new one.
+
 ## [v1.1.2]: 27-02-2024
 ### Added
 - Added flipping to animation frames.
