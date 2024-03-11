@@ -124,27 +124,36 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 	using namespace dfw;
 
 	std::vector<input_pair> pairs{
-		{{input_description::types::keyboard, SDL_SCANCODE_ESCAPE, 0}, input::escape},
-		{input_description_from_config_token(config.token_from_path("input:left")), input::left},
-		{input_description_from_config_token(config.token_from_path("input:right")), input::right},
-		{input_description_from_config_token(config.token_from_path("input:up")), input::up},
-		{input_description_from_config_token(config.token_from_path("input:down")), input::down},
-		{input_description_from_config_token(config.token_from_path("input:pageup")), input::pageup},
-		{input_description_from_config_token(config.token_from_path("input:pagedown")), input::pagedown},
-		{input_description_from_config_token(config.token_from_path("input:enter")), input::enter},
-		{input_description_from_config_token(config.token_from_path("input:save")), input::save},
-		{input_description_from_config_token(config.token_from_path("input:load")), input::load},
-		{input_description_from_config_token(config.token_from_path("input:lctrl")), input::lctrl},
-		{input_description_from_config_token(config.token_from_path("input:del")), input::del},
-		{input_description_from_config_token(config.token_from_path("input:insert")), input::insert},
-		{input_description_from_config_token(config.token_from_path("input:rename")), input::rename},
-		{input_description_from_config_token(config.token_from_path("input:change_id")), input::change_id},
-		{input_description_from_config_token(config.token_from_path("input:backspace")), input::backspace},
-		{input_description_from_config_token(config.token_from_path("input:plus")), input::plus},
-		{input_description_from_config_token(config.token_from_path("input:minus")), input::minus},
-		{input_description_from_config_token(config.token_from_path("input:f1")), input::f1},
-		{input_description_from_config_token(config.token_from_path("input:flip")), input::flip}
+		{{input_description::types::keyboard, SDL_SCANCODE_ESCAPE, 0}, input::escape}
 	};
+
+	auto add=[&](std::string _token, int _input_type) {
+
+		for(const auto desc : dfw::input_description_from_config_token(config.token_from_path(_token))) {
+
+			pairs.push_back({desc, _input_type});
+		}
+	};
+
+	add("input:left", input::left);
+	add("input:right", input::right);
+	add("input:up", input::up);
+	add("input:down", input::down);
+	add("input:pageup", input::pageup);
+	add("input:pagedown", input::pagedown);
+	add("input:enter", input::enter);
+	add("input:save", input::save);
+	add("input:load", input::load);
+	add("input:lctrl", input::lctrl);
+	add("input:del", input::del);
+	add("input:insert", input::insert);
+	add("input:rename", input::rename);
+	add("input:change_id", input::change_id);
+	add("input:backspace", input::backspace);
+	add("input:plus", input::plus);
+	add("input:minus", input::minus);
+	add("input:f1", input::f1);
+	add("input:flip", input::flip);
 
 	kernel.init_input_system(pairs);
 }
