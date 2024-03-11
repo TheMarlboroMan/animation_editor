@@ -42,6 +42,13 @@ std::string animation_saver::to_string(
 			if(fr.flipped_horizontal) flipped+=1;
 			if(fr.flipped_vertical) flipped+=2;
 
+			switch(fr.rotation_degrees) {
+
+				case 90: flipped+=4; break;
+				case 180: flipped+=8; break;
+				case 270: flipped+=12; break;
+			}
+
 			ss<<fr.duration_ms<<"\t"<<fr.index<<"\t"<<flipped<<std::endl;
 		}
 	}

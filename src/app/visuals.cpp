@@ -69,6 +69,14 @@ int visuals::flip_flags_for_animation_time(
 		const auto& fr=_animation.frames.at(0);
 		if(fr.flipped_horizontal) flags+=1;
 		if(fr.flipped_vertical) flags+=2;
+
+		switch(fr.rotation_degrees) {
+
+			case 90: flags+=4; break;
+			case 180: flags+=8; break;
+			case 270: flags+=12; break;
+		}
+
 		return flags;
 	}
 	else {
@@ -85,6 +93,12 @@ int visuals::flip_flags_for_animation_time(
 
 				if(frame.flipped_horizontal) flags+=1;
 				if(frame.flipped_vertical) flags+=2;
+				switch(frame.rotation_degrees) {
+
+					case 90: flags+=4; break;
+					case 180: flags+=8; break;
+					case 270: flags+=12; break;
+				}
 				return flags;
 			}
 			framesum+=frame_duration;

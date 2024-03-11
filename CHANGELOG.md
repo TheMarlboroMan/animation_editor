@@ -14,6 +14,10 @@ Changes will be documented under Added, Changed, Deprecated, Removed, Fixed or S
 - The animation preview is a static 32x32... could be adjusted.
 - Preview controller with the animation at its real size.
 
+## [v1.1.5]: 2024-03-11
+### Added
+- Added frame rotation in 90 degree steps.
+
 ## [v1.1.4]: 2024-03-06
 ### Changed
 - Changes to adapt to dfw.

@@ -144,6 +144,11 @@ void animation::loop(
 		flip_frame(lctrl);
 	}
 
+	if(_input.is_input_down(input::rename)) {
+
+		rotate_frame(lctrl);
+	}
+
 	if(_input.is_input_down(input::plus)) {
 
 		make_frame_longer(lctrl);
@@ -204,6 +209,8 @@ void animation::draw(
 
 		bmp.set_invert_horizontal(item.item.flipped_horizontal);
 		bmp.set_invert_vertical(item.item.flipped_vertical);
+		bmp.center_rotation_center();
+		bmp.set_rotation(item.item.rotation_degrees);
 
 		bmp.draw(_screen);
 	}
@@ -219,6 +226,20 @@ void animation::draw(
 
 	bmp.set_invert_horizontal(flipped_mask & 1);
 	bmp.set_invert_vertical(flipped_mask & 2);
+
+	int degrees=0;
+	if(flipped_mask & 4) {
+
+		degrees+=90;
+	}
+
+	if(flipped_mask & 8) {
+
+		degrees+=180;
+	}
+
+	bmp.center_rotation_center();
+	bmp.set_rotation(degrees);
 	bmp.draw(_screen);
 }
 
@@ -436,6 +457,36 @@ void animation::flip_frame(
 
 		frame.flipped_horizontal=!frame.flipped_horizontal;
 	}
+
+	update_list();
+	frame_list.set_index(index);
+	update_hud();
+}
+
+void animation::rotate_frame(
+	bool _counterclockwise
+) {
+
+	if(!(current_animation->frames.size())) {
+
+		return;
+	}
+
+	const auto index=frame_list.get_current_index();
+	auto& frame=current_animation->frames.at(index);
+
+	int degrees=frame.rotation_degrees + (_counterclockwise ? -90 : 90);
+
+	if(degrees < 0) {
+
+		degrees=270;
+	}
+	else if(degrees==360) {
+
+		degrees=0;
+	}
+
+	frame.rotation_degrees=degrees;
 
 	update_list();
 	frame_list.set_index(index);

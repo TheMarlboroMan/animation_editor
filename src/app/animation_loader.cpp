@@ -102,7 +102,18 @@ animations animation_loader::from_string(
 				bool flipped_horizontal=flipped & 1;
 				bool flipped_vertical=flipped & 2;
 
-				anim.frames.push_back({index, duration_ms, flipped_horizontal, flipped_vertical});
+				int degrees=0;
+				if(flipped & 4) {
+
+					degrees+=90;
+				}
+
+				if(flipped & 8) {
+
+					degrees+=180;
+				}
+
+				anim.frames.push_back({index, duration_ms, flipped_horizontal, flipped_vertical, degrees});
 			}
 			break;
 		}

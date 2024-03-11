@@ -244,6 +244,19 @@ void main::draw(
 
 		bmp.set_invert_horizontal(flipped_mask & 1);
 		bmp.set_invert_vertical(flipped_mask & 2);
+		int degrees=0;
+		if(flipped_mask & 4) {
+
+			degrees+=90;
+		}
+
+		if(flipped_mask & 8) {
+
+			degrees+=180;
+		}
+
+		bmp.center_rotation_center();
+		bmp.set_rotation(degrees);
 
 		bmp.draw(_screen);
 	}

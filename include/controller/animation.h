@@ -54,6 +54,7 @@ class animation:
 		void                        make_frame_longer(bool);
 		void                        make_frame_shorter(bool);
 		void                        flip_frame(bool);
+		void                        rotate_frame(bool);
 
 		//references...
 		lm::logger&                         log;

@@ -10,6 +10,7 @@ struct frame {
 	int                 duration_ms;
 	bool                flipped_horizontal{false};
 	bool                flipped_vertical{false};
+	int                 rotation_degrees{0};
 };
 
 }
