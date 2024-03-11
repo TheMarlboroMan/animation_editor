@@ -29,7 +29,11 @@ int main(int argc, char ** argv)
 	auto env=make_env();
 
 	//Init libdansdl2 log.
+#ifdef IS_DEBUG_BUILD
+	ldt::log_lsdl::set_type(ldt::log_lsdl::types::out);
+#else
 	ldt::log_lsdl::set_type(ldt::log_lsdl::types::null);
+#endif
 
 	//Argument controller.
 	tools::arg_manager carg(argc, argv);

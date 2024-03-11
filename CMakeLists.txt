@@ -11,7 +11,7 @@ option(WITH_LEXICAL_NORMALIZE "just see the tile_editor or sprite table apps for
 #application version and build type
 set(MAJOR_VERSION 1)
 set(MINOR_VERSION 1)
-set(PATCH_VERSION 3)
+set(PATCH_VERSION 4)
 
 if(${BUILD_REGULAR})
 
@@ -51,11 +51,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(${BUILD_DEBUG})
+
 	set(CMAKE_BUILD_TYPE Debug)
 	if(${CMAKE_VERSION} VERSION_LESS "3.22.0")
 		add_definitions(-DLIBDANSDL2_DEBUG)
+		add_definitions(-DIS_DEBUG_BUILD)
 	else()
 		add_compile_definitions(LIBDANSDL2_DEBUG)
+		add_compile_definitions(IS_DEBUG_BUILD)
 	endif()
 else()
 	set(CMAKE_BUILD_TYPE Release)

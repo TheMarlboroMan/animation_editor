@@ -14,6 +14,10 @@ Changes will be documented under Added, Changed, Deprecated, Removed, Fixed or S
 - The animation preview is a static 32x32... could be adjusted.
 - Preview controller with the animation at its real size.
 
+## [v1.1.4]: 2024-03-06
+### Changed
+- Changes to adapt to dfw.
+
 ## [v1.1.3]: 03-03-2024
 ### Changed
 - Last frame is kept in frame selection page when inserting a new one.

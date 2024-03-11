@@ -38,13 +38,21 @@ void frame_selection::awake(
 	}
 
 	intra_success=false;
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"last page was "<<last_page<<std::endl;
+	std::cout<<"current page is "<<frame_list.get_current_page()<<std::endl;
+
+	while(last_page) {
+
+		frame_list.next_page();
+		--last_page;
+	}
+
 	frame_list.set_index(last_index);
-//	while(last_page) {
 
-//		frame_list.next_page();
-//		--last_page;
-//	}
-
+#endif
 
 }
 
@@ -65,7 +73,8 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 
 		intra_success=true;
 		last_page=frame_list.get_current_page();
-		last_index=frame_list.get().first;
+		//This is the last FRAME index, not its numeric index.
+		last_index=frame_list.get_current_index();
 		pop_state();
 		return;
 	}
@@ -73,33 +82,64 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 	if(_input.is_input_down(input::left)) {
 
 		frame_list.previous();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 	else if(_input.is_input_down(input::right)) {
 
+
 		frame_list.next();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 
 	if(_input.is_input_down(input::up)) {
 
 		frame_list.previous_row();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 	else if(_input.is_input_down(input::down)) {
 
 		frame_list.next_row();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 
 	if(_input.is_input_down(input::pageup)) {
 
 		frame_list.previous_page();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 	else if(_input.is_input_down(input::pagedown)) {
 
 		frame_list.next_page();
+
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"index: "<<frame_list.get_current_index()<<" page: "<<frame_list.get_current_page()<<std::endl;
+#endif
 		return;
 	}
 }
