@@ -169,6 +169,12 @@ void frame_selection::draw(
 			item.item.second.box
 		);
 
+		//Flip and rotate ad libitum...
+		bmp.set_invert_horizontal(item.item.second.is_flipped_horizontal());
+		bmp.set_invert_vertical(item.item.second.is_flipped_vertical());
+		bmp.center_rotation_center();
+		bmp.set_rotation(item.item.second.ger_rotation());
+
 		bmp.set_blend(ldv::representation::blends::alpha);
 		bmp.draw(_screen);
 
