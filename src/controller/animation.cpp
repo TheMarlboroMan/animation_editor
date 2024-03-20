@@ -201,16 +201,23 @@ void animation::draw(
 		txt.go_to({0, y});
 		txt.draw(_screen);
 
+		const auto& frame=visuals.get_table().get(item.item.index);
+
 		ldv::bitmap_representation bmp(
 			visuals.get_texture(),
 			{max_w, y, 32, 32},
-			visuals.get_table().get(item.item.index).box
+			frame.box
 		);
 
-		bmp.set_invert_horizontal(item.item.flipped_horizontal);
-		bmp.set_invert_vertical(item.item.flipped_vertical);
+		//Start with the sprite transformations and then add the frame ones...
+		bool flipped_horizontal=frame.is_flipped_horizontally() xor item.item.flipped_horizontal;
+		bool flipped_vertical=frame.is_flipped_vertically() xor item.item.flipped_vertical;
+		int degrees=(frame.get_rotation()+item.item.rotation_degrees) % 360;
+
+		bmp.set_invert_horizontal(flipped_horizontal);
+		bmp.set_invert_vertical(flipped_vertical);
 		bmp.center_rotation_center();
-		bmp.set_rotation(item.item.rotation_degrees);
+		bmp.set_rotation(degrees);
 
 		bmp.draw(_screen);
 	}
@@ -218,7 +225,7 @@ void animation::draw(
 	//Now for the preview...
 	ldv::bitmap_representation bmp(
 		visuals.get_texture(),
-		{max_w, 0, 32, 32}, //TODO: This blows.
+		{max_w, 0, 32, 32}, //TODO: This blows. Should change with each frame.
 		visuals.rect_for_animation_time(ticker.get(), *current_animation, duration)
 	);
 

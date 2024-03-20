@@ -61,51 +61,39 @@ int visuals::flip_flags_for_animation_time(
 ) const {
 
 	const auto& frames=_animation.frames;
+	const auto& anim_table=get_table();
 
 	int flags=0;
+	float duration_seconds=_duration / 1000.f;
+	float current_time=fmod(_current_time, duration_seconds);
+	float framesum{0.f};
 
-	if(frames.size()==1) {
+	for(const auto& frame : frames) {
 
-		const auto& fr=_animation.frames.at(0);
-		if(fr.flipped_horizontal) flags+=1;
-		if(fr.flipped_vertical) flags+=2;
+		float frame_duration=frame.duration_ms / 1000.f;
 
-		switch(fr.rotation_degrees) {
+		if(framesum <= current_time && current_time < framesum+frame_duration) {
 
-			case 90: flags+=4; break;
-			case 180: flags+=8; break;
-			case 270: flags+=12; break;
-		}
+			const auto& sprite=anim_table.get(frame.index);
 
-		return flags;
-	}
-	else {
+			bool flipped_horizontally=frame.flipped_horizontal xor sprite.is_flipped_horizontally();
+			bool flipped_vertically=frame.flipped_vertical xor sprite.is_flipped_vertically();
+			int degrees=(frame.rotation_degrees + sprite.get_rotation()) % 360;
 
-		float duration_seconds=_duration / 1000.f;
-		float current_time=fmod(_current_time, duration_seconds);
-		float framesum{0.f};
+			if(flipped_horizontally) flags+=1;
+			if(flipped_vertically) flags+=2;
+			switch(degrees) {
 
-		for(const auto& frame : frames) {
-
-			float frame_duration=frame.duration_ms / 1000.f;
-
-			if(framesum <= current_time && current_time < framesum+frame_duration) {
-
-				if(frame.flipped_horizontal) flags+=1;
-				if(frame.flipped_vertical) flags+=2;
-				switch(frame.rotation_degrees) {
-
-					case 90: flags+=4; break;
-					case 180: flags+=8; break;
-					case 270: flags+=12; break;
-				}
-				return flags;
+				case 90: flags+=4; break;
+				case 180: flags+=8; break;
+				case 270: flags+=12; break;
 			}
-			framesum+=frame_duration;
+			return flags;
 		}
+
+		framesum+=frame_duration;
 	}
 
-	//Stupid default that should never happen.
-	return 0;
+	throw std::runtime_error("error: found end of animation and could not fetch frame data");
 }
 
