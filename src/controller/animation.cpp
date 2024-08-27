@@ -101,13 +101,22 @@ void animation::loop(
 		return;
 	}
 
-	if(_input.is_input_down(input::pageup)) {
+	bool lctrl=_input.is_input_pressed(input::lctrl);
+	bool lshift=_input.is_input_pressed(input::lshift);
+
+	if(
+		_input.is_input_down(input::pageup)
+		|| (lctrl && _input.is_input_down(input::up))
+	) {
 
 		move_frame_up();
 		return;
 	}
 
-	if(_input.is_input_down(input::pagedown)) {
+	if(
+		_input.is_input_down(input::pagedown)
+		|| (lctrl && _input.is_input_down(input::down))
+	) {
 
 		move_frame_down();
 		return;
@@ -127,18 +136,21 @@ void animation::loop(
 
 	if(_input.is_input_down(input::down)) {
 
-		frame_list.next();
+		lshift
+			? frame_list.next_page()
+			: frame_list.next();
 		update_hud();
 		return;
 	}
-	else if(_input.is_input_up(input::up)) {
+	else if(_input.is_input_down(input::up)) {
 
-		frame_list.previous();
+		lshift
+			? frame_list.previous_page()
+			: frame_list.previous();
 		update_hud();
 		return;
 	}
 	
-	bool lctrl=_input.is_input_pressed(input::lctrl);
 	if(_input.is_input_down(input::flip)) {
 
 		flip_frame(lctrl);

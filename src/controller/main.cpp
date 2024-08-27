@@ -57,8 +57,13 @@ main::main(
 void main::awake(
 	dfw::input& /*input*/
 ) {
+
 	if(intra_update_on_awake) {
 
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"updating hud and list on awakening..."<<std::endl;
+#endif
 		const auto index=animation_list.get_current_index();
 
 		update_hud();
@@ -66,9 +71,15 @@ void main::awake(
 
 		if(intra_keep_index_on_awake) {
 
+#ifdef IS_DEBUG_BUILD
+
+	std::cout<<"setting current index to "<<index<<std::endl;
+#endif
+
+			//TODO: This DOES NOT SET THE CURRENT PAGE???? Nope, it DOES NOT
+			//manage page turns... and it goes like that... on purpose???
 			animation_list.set_index(index);
 		}
-
 	}
 
 	intra_file_browser_allow_new=false;
@@ -113,9 +124,12 @@ void main::loop(
 		return;
 	}
 
+	bool lctrl=_input.is_input_pressed(input::lctrl);
+	bool lshift=_input.is_input_pressed(input::lshift);
+
 	if(_input.is_input_down(input::save)) {
 
-		if(_input.is_input_pressed(input::lctrl)) {
+		if(lctrl) {
 
 			intra_file_browser_allow_new=true;
 			push_state(state_file_browser);
@@ -147,13 +161,19 @@ void main::loop(
 		return;
 	}
 
-	if(_input.is_input_down(input::pageup)) {
+	if(
+		_input.is_input_down(input::pageup)
+		|| (lctrl && _input.is_input_down(input::up))
+	) {
 
 		move_animation_up();
 		return;
 	}
 
-	if(_input.is_input_down(input::pagedown)) {
+	if(
+		_input.is_input_down(input::pagedown)
+		|| (lctrl && _input.is_input_down(input::down))
+	) {
 
 		move_animation_down();
 		return;
@@ -173,13 +193,17 @@ void main::loop(
 
 	if(_input.is_input_down(input::down)) {
 
-		animation_list.next();
+		lshift
+			? animation_list.next_page()
+			: animation_list.next();
 		update_hud();
 		return;
 	}
-	else if(_input.is_input_up(input::up)) {
+	else if(_input.is_input_down(input::up)) {
 
-		animation_list.previous();
+		lshift
+			? animation_list.previous_page()
+			: animation_list.previous();
 		update_hud();
 		return;
 	}
@@ -225,7 +249,7 @@ void main::draw(
 
 		txt.set_max_width(max_w);
 		txt.set_text(ss.str());
-		txt.go_to({0, y});
+		txt.go_to({16, y});
 		txt.draw(_screen);
 
 		if(!item.item.animation.frames.size()) {

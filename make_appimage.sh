@@ -3,7 +3,7 @@
 if [[ $# -ne 2 ]]
 then
 
-	if [ $1 == "auto" ]
+	if [ "$1" == "auto" ]
 	then
 
 		linuxdeploypath="/home/daniel/bin/linuxdeploy"

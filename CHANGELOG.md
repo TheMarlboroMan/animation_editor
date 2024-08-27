@@ -14,6 +14,15 @@ Changes will be documented under Added, Changed, Deprecated, Removed, Fixed or S
 - The animation preview is a static 32x32... could be adjusted.
 - Preview controller with the animation at its real size.
 
+## [v1.1.7]: 2024-08-27
+### Added
+- Page scrolling
+### Changed
+- Added alternative inputs to new / move.
+- Updated help.
+### Fixed
+- Fixes bad display on returning to animation lists
+
 ## [v1.1.6]: 2024-03-19
 ### Fixed
 - Frames appear now properly rotated and flipped in the frame selection.

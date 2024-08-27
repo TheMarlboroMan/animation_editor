@@ -145,6 +145,7 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 	add("input:save", input::save);
 	add("input:load", input::load);
 	add("input:lctrl", input::lctrl);
+	add("input:lshift", input::lshift);
 	add("input:del", input::del);
 	add("input:insert", input::insert);
 	add("input:rename", input::rename);

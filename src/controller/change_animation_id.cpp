@@ -29,8 +29,8 @@ void change_animation_id::awake(
 	_input().start_text_input();
 	_input().set_text_filter([](const SDL_Event& _event) -> bool {
 		try {
-			int val=std::stoi(_event.text.text);
-			return val || !val; //that is the question, whether is nobler in the mind...
+			std::stoi(_event.text.text);
+			return true;
 		}
 		catch(std::invalid_argument&) {
 			return false;

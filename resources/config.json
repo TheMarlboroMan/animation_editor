@@ -44,6 +44,9 @@
 		"lctrl":[
 			{"type":0, "device": 0, "code":224}
 		],
+		"lshift":[
+			{"type":0, "device": 0, "code":225}
+		],
 		"f1":[
 			{"type":0, "device": 0, "code":58}
 		],
@@ -51,7 +54,9 @@
 			{"type":0, "device": 0, "code":76}
 		],
 		"insert":[
-			{"type":0, "device": 0, "code":73}
+			{"type":0, "device": 0, "code":73},
+			{"type":0, "device": 0, "code":17}
+
 		],
 		"rename":[
 			{"type":0, "device": 0, "code":21}

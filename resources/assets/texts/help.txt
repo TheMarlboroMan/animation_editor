@@ -12,11 +12,11 @@
 
 Red animations are those with repeated ids.
 
-arrows : select current animation
+arrows : select current animation (lshift to page)
 enter : access frame list
-insert : create animation
+insert / n: create animation at current spot
 delete : delete current animation
-pageup - pagedown : change animation order.
+pageup - pagedown / lctrl+arrows : change animation order.
 s - save
 lctrl+x - save as
 l - load
@@ -25,11 +25,11 @@ i - change animation id
 
 == FRAME LIST ==
 
-arrows : select current frame
+arrows : select current frame (lshift to page)
 enter : access sprite selection
-insert : create frame
+insert / n: create frame at current positio
 delete : delete current frame
-pageup - pagedown : change frame order.
+pageup - pagedown / lctrl + arrows: change frame order.
 + : make frame longer (hold ctrl for fine control)
 - : make frame shorter (hold ctrl for fine control)
 f - flip the frame (hold ctrl for vertical flip)
@@ -38,4 +38,5 @@ r - rotate the frame (hold ctrl to change direction)
 == SPRITE LIST ==
 
 arrows : choose sprite
+pageup - pagedown / lshift + up /down : change page
 enter : select sprite

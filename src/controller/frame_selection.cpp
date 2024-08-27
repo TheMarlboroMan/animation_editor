@@ -91,7 +91,6 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 	}
 	else if(_input.is_input_down(input::right)) {
 
-
 		frame_list.next();
 
 #ifdef IS_DEBUG_BUILD
@@ -101,9 +100,12 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 		return;
 	}
 
+	bool lshift=_input.is_input_pressed(input::lshift);
 	if(_input.is_input_down(input::up)) {
 
-		frame_list.previous_row();
+		lshift
+			? frame_list.previous_page()
+			: frame_list.previous_row();
 
 #ifdef IS_DEBUG_BUILD
 
@@ -113,7 +115,9 @@ void frame_selection::loop(dfw::input& _input, const dfw::loop_iteration_data& /
 	}
 	else if(_input.is_input_down(input::down)) {
 
-		frame_list.next_row();
+		lshift
+			? frame_list.next_page()
+			: frame_list.next_row();
 
 #ifdef IS_DEBUG_BUILD
 
