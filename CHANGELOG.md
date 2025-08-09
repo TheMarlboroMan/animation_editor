@@ -11,8 +11,11 @@ Changes will be documented under Added, Changed, Deprecated, Removed, Fixed or S
 - screen clear with rgba does not respect alpha.
 
 ### To be developed
-- The animation preview is a static 32x32... could be adjusted.
 - Preview controller with the animation at its real size.
+
+## [v1.1.8]: 2025-08-09
+### Added
+- Animation preview is now the size of the real animation.
 
 ## [v1.1.7]: 2024-08-27
 ### Added

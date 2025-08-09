@@ -235,10 +235,21 @@ void animation::draw(
 	}
 
 	//Now for the preview...
+	auto clipping_rect=visuals.rect_for_animation_time(ticker.get(), *current_animation, duration);
+	ldv::rect position_rect{max_w, 0, clipping_rect.w, clipping_rect.h};
+
 	ldv::bitmap_representation bmp(
 		visuals.get_texture(),
-		{max_w, 0, 32, 32}, //TODO: This blows. Should change with each frame.
-		visuals.rect_for_animation_time(ticker.get(), *current_animation, duration)
+		position_rect,
+		clipping_rect
+	);
+
+	bmp.align(
+		{max_w, 0, 32, 32},
+		{
+			ldv::representation_alignment::h::none,
+			ldv::representation_alignment::v::inner_bottom
+		}
 	);
 
 	int flipped_mask=visuals.flip_flags_for_animation_time(ticker.get(), *current_animation, duration);

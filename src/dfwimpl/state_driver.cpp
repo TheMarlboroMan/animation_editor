@@ -373,7 +373,10 @@ void state_driver::prepare_state(
 	}
 }
 
-void state_driver::common_pre_loop_input(dfw::input& input, float /*delta*/) {
+void state_driver::common_pre_loop_input(
+	dfw::input& input, 
+	ldtools::tdelta
+) {
 
 	if(input().is_event_joystick_connected()) {
 		lm::log(log).info()<<"New joystick detected..."<<std::endl;
@@ -383,18 +386,22 @@ void state_driver::common_pre_loop_input(dfw::input& input, float /*delta*/) {
 
 void state_driver::common_loop_input(
 	dfw::input& /*input*/,
-	float _delta
+	ldtools::tdelta _delta
 ) {
 
 	ticker.tick(_delta);
 	message_manager.tick(_delta);
 }
 
-void state_driver::common_pre_loop_step(float /*delta*/) {
+void state_driver::common_pre_loop_step(
+	ldtools::tdelta
+) {
 
 }
 
-void state_driver::common_loop_step(float /*delta*/) {
+void state_driver::common_loop_step(
+	ldtools::tdelta
+) {
 
 }
 

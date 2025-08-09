@@ -2,6 +2,7 @@
 
 #include <ldv/texture.h>
 #include <ldtools/sprite_table.h>
+#include <ldtools/time_definitions.h>
 #include "app/animation.h"
 #include <memory>
 
@@ -14,11 +15,11 @@ class visuals {
 
 	ldv::texture&                   get_texture() const {return *texture;}
 	const ldtools::sprite_table&    get_table() const {return table;}
-	ldv::rect                       rect_for_animation_time(float _current_time, const animation_editor::animation& _animation, int _duration) const;
+	ldv::rect                       rect_for_animation_time(ldtools::tdelta _current_time, const animation_editor::animation& _animation, int _duration) const;
 /**
  * produces the flip flags that result from combining the sprite and
  * animation frame flags.*/
-	int                             flip_flags_for_animation_time(float _current_time, const animation_editor::animation& _animation, int _duration) const;
+	int                             flip_flags_for_animation_time(ldtools::tdelta _current_time, const animation_editor::animation& _animation, int _duration) const;
 
 	void                            load_texture(const std::string&);
 	void                            load_table(const std::string&);

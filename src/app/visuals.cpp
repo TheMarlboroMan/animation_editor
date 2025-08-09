@@ -20,7 +20,7 @@ void visuals::load_table(
 }
 
 ldv::rect visuals::rect_for_animation_time(
-	float _current_time,
+	ldtools::tdelta _current_time,
 	const animation_editor::animation& _animation,
 	int _duration
 ) const {
@@ -34,13 +34,13 @@ ldv::rect visuals::rect_for_animation_time(
 	}
 	else {
 
-		float duration_seconds=_duration / 1000.f;
-		float current_time=fmod(_current_time, duration_seconds);
-		float framesum{0.f};
+		ldtools::tdelta duration_seconds=_duration / 1000.;
+		ldtools::tdelta current_time=fmod(_current_time, duration_seconds);
+		ldtools::tdelta framesum{0.};
 
 		for(const auto& frame : frames) {
 
-			float frame_duration=frame.duration_ms / 1000.f;
+			ldtools::tdelta frame_duration=frame.duration_ms / 1000.;
 
 			if(framesum <= current_time && current_time < framesum+frame_duration) {
 
@@ -55,7 +55,7 @@ ldv::rect visuals::rect_for_animation_time(
 }
 
 int visuals::flip_flags_for_animation_time(
-	float _current_time,
+	ldtools::tdelta _current_time,
 	const animation_editor::animation& _animation,
 	int _duration
 ) const {
@@ -64,13 +64,13 @@ int visuals::flip_flags_for_animation_time(
 	const auto& anim_table=get_table();
 
 	int flags=0;
-	float duration_seconds=_duration / 1000.f;
-	float current_time=fmod(_current_time, duration_seconds);
-	float framesum{0.f};
+	ldtools::tdelta duration_seconds=_duration / 1000.;
+	ldtools::tdelta current_time=fmod(_current_time, duration_seconds);
+	ldtools::tdelta framesum{0.};
 
 	for(const auto& frame : frames) {
 
-		float frame_duration=frame.duration_ms / 1000.f;
+		ldtools::tdelta frame_duration=frame.duration_ms / 1000.;
 
 		if(framesum <= current_time && current_time < framesum+frame_duration) {
 

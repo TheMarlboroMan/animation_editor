@@ -6,12 +6,12 @@ class ticker {
 
 	public:
 
-	void                tick(float);
-	float               get() const {return elapsed;}
+	void                tick(double);
+	double              get() const {return elapsed;}
 
 	private:
 
-	float               elapsed{0.0f};
+	double              elapsed{0.0};
 };
 
 }
