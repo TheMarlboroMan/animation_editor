@@ -33,7 +33,7 @@ class main:
 	                                unsigned int);
 	virtual void                loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void                draw(ldv::screen&, int);
-	virtual void                awake(dfw::input& /*input*/, int=-1);
+	virtual void                awake(dfw::input& /*input*/, int);
 	virtual void                slumber(dfw::input& /*input*/, int);
 	virtual bool                can_leave_state() const {return true;}
 
