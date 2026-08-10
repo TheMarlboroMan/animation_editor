@@ -17,7 +17,8 @@ change_animation_id::change_animation_id(
 }
 
 void change_animation_id::awake(
-	dfw::input& _input
+	dfw::input& _input,
+	int
 ) {
 
 	if(nullptr==animation) {
@@ -39,7 +40,8 @@ void change_animation_id::awake(
 }
 
 void change_animation_id::slumber(
-	dfw::input& _input
+	dfw::input& _input,
+	int
 ) {
 
 	animation=nullptr;

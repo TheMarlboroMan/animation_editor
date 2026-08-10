@@ -28,7 +28,8 @@ frame_selection::frame_selection(
 }
 
 void frame_selection::awake(
-	dfw::input& /*input*/
+	dfw::input& /*input*/,
+	int
 ) {
 
 	frame_list.clear();

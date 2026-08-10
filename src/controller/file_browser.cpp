@@ -53,7 +53,10 @@ file_browser::file_browser(
 	compose_title();
 }
 
-void file_browser::awake(dfw::input& /*_input*/) {
+void file_browser::awake(
+	dfw::input& /*_input*/,
+	int
+) {
 
 	intra_success=false;
 	intra_result="";
@@ -64,7 +67,6 @@ void file_browser::awake(dfw::input& /*_input*/) {
 
 	compose_title();
 }
-
 
 void file_browser::solve(
 	bool _result,

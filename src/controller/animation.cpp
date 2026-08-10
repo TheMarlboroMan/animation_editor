@@ -52,7 +52,8 @@ animation::animation(
 }
 
 void animation::awake(
-	dfw::input& /*input*/
+	dfw::input& /*input*/,
+	int
 ) {
 
 	auto index=frame_list.get_current_index();
@@ -68,7 +69,8 @@ void animation::awake(
 }
 
 void animation::slumber(
-	dfw::input& /*input*/
+	dfw::input& /*input*/,
+	int
 ) {
 
 	if(!preserve_animation_on_exit) {

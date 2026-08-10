@@ -17,7 +17,8 @@ rename_animation::rename_animation(
 }
 
 void rename_animation::awake(
-	dfw::input& _input
+	dfw::input& _input,
+	int
 ) {
 
 	if(nullptr==animation) {
@@ -41,7 +42,8 @@ void rename_animation::awake(
 }
 
 void rename_animation::slumber(
-	dfw::input& _input
+	dfw::input& _input,
+	int
 ) {
 
 	animation=nullptr;

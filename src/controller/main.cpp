@@ -55,7 +55,8 @@ main::main(
 }
 
 void main::awake(
-	dfw::input& /*input*/
+	dfw::input& /*input*/,
+	int
 ) {
 
 	if(intra_update_on_awake) {
@@ -88,7 +89,8 @@ void main::awake(
 }
 
 void main::slumber(
-	dfw::input& /*input*/
+	dfw::input& /*input*/,
+	int
 ) {
 
 	//TODO:
